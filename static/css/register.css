@@ -1,0 +1,73 @@
+.side-nav {
+  display: none;
+}
+
+.form {
+  padding: 2rem;
+}
+
+.form > h4 {
+  font-family: var(--header-font);
+  color: #212121;
+  font-size: 6ch;
+  text-align: center;
+}
+
+form {
+  padding: 3rem;
+  max-width: max-content;
+  margin: 2rem auto 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  background-color: var(--sec-bgcolor);
+  border-radius: 0.3rem;
+}
+
+.input {
+  display: grid;
+  gap: 0.6rem;
+}
+
+label {
+  color: #212121;
+  font-family: var(--paragraph-font);
+  font-size: 2ch;
+  letter-spacing: 1px;
+}
+
+input,
+select {
+  padding: 0.8em 1em;
+  min-width: 15vw;
+  border-radius: 10rem;
+  font-size: 1.2rem;
+  border: none;
+  font-family: system-ui;
+  letter-spacing: 1px;
+  background-color: var(--main-bgcolor);
+}
+
+input:focus,
+select:focus {
+  outline: 2px solid var(--highlight-bgcolor);
+}
+
+input::placeholder {
+  font-size: 1rem;
+}
+
+.btn {
+  margin-top: 2rem;
+  color: var(--main-bgcolor);
+  border: none;
+  font-family: system-ui;
+  border-radius: 10rem;
+  cursor: pointer;
+  padding: 0.8em;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  position: relative;
+  background-color: var(--highlight-bgcolor);
+  grid-column: 1/3;
+}
