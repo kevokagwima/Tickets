@@ -16,12 +16,12 @@
 <body>
   <header>
     <a href="{{ url_for('home') }}">
-      <h1 id="logo">SOF Tickets</h1>
+      <img id="logo" src="../static/images/Screenshot.png" alt="sofafrica.com logo">
     </a>
-    <div class="links">
+    <!-- <div class="links">
       <a id="link" href="{{ url_for('register') }}">Sign Up</a>
       <a id="link" href="#">Sign In</a>
-    </div>
+    </div> -->
   </header>
   {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}

@@ -1,0 +1,68 @@
+.events {
+  margin-top: 2rem;
+  padding: 0 2rem;
+  position: relative;
+}
+
+#header {
+  font-family: var(--header-font);
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#header > #event-link {
+  padding: 0.6em 0.8em;
+  background-color: var(--highlight-bgcolor);
+  border-radius: 30rem;
+  color: var(--main-bgcolor);
+  font-family: var(--paragraph-font);
+  font-size: 0.6ch;
+}
+
+.events-box {
+  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2rem;
+}
+
+.event {
+  border-radius: 0.2rem;
+  background-color: var(--main-bgcolor);
+  overflow: hidden;
+}
+
+.image-box img {
+  max-height: 10rem;
+  min-width: 100%;
+}
+
+.event-info {
+  padding: 1rem;
+}
+
+.event h4 {
+  font-family: var(--header-font);
+  font-size: 2.5ch;
+}
+
+.event-dates {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--links-font);
+  padding: 0.6rem 0;
+  font-size: 1.8ch;
+}
+
+#tickets {
+  font-family: var(--paragraph-font);
+}
+
+#tickets > span {
+  font-size: 2.5ch;
+  font-family: var(--header-font);
+  color: var(--highlight-bgcolor);
+}

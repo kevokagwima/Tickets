@@ -14,6 +14,10 @@ html {
   scroll-padding-top: 3rem;
 }
 
+body {
+  background-color: var(--sec-bgcolor);
+}
+
 :root {
   --main-bgcolor: white;
   --sec-bgcolor: whitesmoke;
@@ -33,6 +37,12 @@ html {
 ::-webkit-scrollbar-thumb {
   background-color: var(--highlight-bgcolor);
   border-radius: 30rem;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .btn--loading .button--text {
@@ -64,7 +74,6 @@ html {
 
 a {
   text-decoration: none;
-  font-family: var(--special-font);
 }
 
 header {
@@ -72,12 +81,15 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background-color: var(--highlight-bgcolor);
+  background-color: var(--main-bgcolor);
+  position: sticky;
+  inset: 0 0 auto 0;
+  box-shadow: 0 0 10px -8px black;
+  z-index: 10;
 }
 
 #logo {
-  color: var(--main-bgcolor);
-  font-family: var(--header-font);
+  max-height: 2.5rem;
 }
 
 .links {

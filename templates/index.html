@@ -10,4 +10,27 @@ Home
 {% endblock %}
 
 {% block body %}
+<div class="events">
+  <h1 id="header">
+    Our Events
+    <a id="event-link" href="{{ url_for('create_event') }}">Create Event</a>
+  </h1>
+  <div class="events-box">
+    {% for event in events %}
+    <div class="event">
+      <div class="image-box">
+        <img src="../static/images/banner-tablet.png" alt="event-img">
+      </div>
+      <div class="event-info">
+        <h4>{{ event.name }}</h4>
+        <div class="event-dates">
+          <p>Date: {{ event.date.strftime("%d-%m-%Y") }}</p>
+          <p>Time: {{ event.time }}</p>
+        </div>
+        <p id="tickets"><span>{{ event.tickets }}</span> tickets</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
 {% endblock %}

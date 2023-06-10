@@ -1,0 +1,55 @@
+.event-registration {
+  padding: 2rem;
+}
+
+.event-registration h1 {
+  font-family: var(--header-font);
+  text-align: center;
+  font-size: 5ch;
+}
+
+form {
+  margin-top: 4rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.2rem;
+  max-width: 30vw;
+  margin-inline: auto;
+}
+
+.extend {
+  grid-column: 1/3;
+}
+
+.input {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.input label {
+  font-family: var(--links-font);
+}
+
+.input input {
+  padding: 1rem;
+  border: none;
+  font-family: var(--paragraph-font);
+  font-size: 2.3ch;
+  border-radius: 0.2rem;
+}
+
+.input input:focus {
+  outline: 2px solid var(--highlight-bgcolor);
+}
+
+form button {
+  margin-top: 1rem;
+  border: none;
+  padding: 1em;
+  font-family: var(--header-font);
+  font-size: 2ch;
+  background-color: var(--highlight-bgcolor);
+  color: var(--main-bgcolor);
+  border-radius: 0.2rem;
+  cursor: pointer;
+}
