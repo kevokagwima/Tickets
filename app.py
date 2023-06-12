@@ -2,6 +2,7 @@ from flask import Flask, render_template, flash, redirect, url_for, request
 from flask_login import login_manager, LoginManager, login_user, logout_user, current_user
 from models import * 
 from form import *
+from datetime import datetime, date
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "fvjdnjkdsnsnd"
@@ -32,22 +33,43 @@ def home():
 @app.route("/create-event", methods=["POST", "GET"])
 def create_event():
   if request.method == "POST":
-    new_event = Event(
-      name = request.form.get("event-name"),
-      date = request.form.get("event-date"),
-      time = request.form.get("event-time"),
-      tickets = request.form.get("tickets"),
-    )
-    db.session.add(new_event)
-    db.session.commit()
-    flash(f"Event '{new_event.name}' created", category="success")
-    return redirect(url_for('home'))
+    todays_date = date.today()
+    event_date = request.form.get("event-date")
+    if event_date < str(todays_date):
+      flash("Invalid event date", category="danger")
+      return redirect(url_for('create_event'))
+    else:
+      new_event = Event(
+        name = request.form.get("event-name"),
+        date = event_date,
+        time = request.form.get("event-time"),
+        tickets = request.form.get("tickets"),
+      )
+      db.session.add(new_event)
+      db.session.commit()
+      flash(f"Event '{new_event.name}' created successfully", category="success")
+      return redirect(url_for('home'))
   return render_template("event.html")
 
-@app.route("/tickets", methods=["POST"])
-def tickets():
-  flash("Tickets saved successfully", category="success")
-  return redirect(url_for('home'))
+@app.route("/tickets/<int:event_id>", methods=["POST", "GET"])
+def tickets(event_id):
+  event = Event.query.get(event_id)
+  if event:
+    if request.method == "POST":
+      new_user = Users(
+        first_name = request.form.get("fname"),
+        surname = request.form.get("sname"),
+        email = request.form.get("email"),
+        phone = request.form.get("phone"),
+        tickets = request.form.get("tickets"),
+      )
+      db.session.add(new_user)
+      db.session.commit()
+      flash("Tickets saved successfully", category="success")
+  else:
+    flash("Event could not be found", category="danger")
+    return redirect(url_for('home'))
+  return render_template("book.html", event=event)
 
 if __name__ == "__main__":
   app.run(debug=True)

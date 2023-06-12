@@ -6,64 +6,46 @@
 {% endblock %}
 
 {% block title %}
-Book Tickets
+{{ event.name }}
 {% endblock %}
 
 {% block body %}
 <div class="form">
   <h1 class="header">Book your slot now</h1>
-  <form action="{{ url_for('tickets') }}" id='form' method='post' name='Audio-film-series' value='Join us for an Exclusive Madaraka Weekend Invitation!>
-    <input type=' hidden' name='form-name' value='Audio-film-series' />
-  <div class="input">
-    <label for="fname">First Name</label>
-    <input name="First Name" required type="text" id="fname" placeholder="First Name">
+  <div class="event-box">
+    <h4>{{ event.name }}</h4>
+    <p>
+      {{ event.date.strftime("%d/%m/%Y") }}
+      at
+      {{ event.time.strftime("%I:%M %p") }}
+    </p>
   </div>
-  <div class="input">
-    <label for="surname">Last Name</label>
-    <input name="Surname" required type="text" id="surname" placeholder="Last Name">
-  </div>
-  <div class="input">
-    <label for="email">Email Address</label>
-    <input name="email" required type="email" id="email" placeholder="Email Address">
-  </div>
-  <div class="input">
-    <label for="phone">Phone Number</label>
-    <input name="Phone Number" required type="number" id="phone" placeholder="Phone Number">
-  </div>
-  <div class="more-inputs"></div>
+  <form action="#">
+    <div class="input">
+      <label for="fname">First Name</label>
+      <input name="fname" required type="text" id="fname" placeholder="First Name">
+    </div>
+    <div class="input">
+      <label for="surname">Last Name</label>
+      <input name="sname" required type="text" id="surname" placeholder="Last Name">
+    </div>
+    <div class="input note">
+      <label for="email">Email Address</label>
+      <input name="email" required type="email" id="email" placeholder="Email Address">
+    </div>
+    <div class="input">
+      <label for="phone">Phone Number</label>
+      <input name="phone" required type="number" id="phone" placeholder="Phone Number">
+    </div>
+    <div class="input">
+      <label for="tickets">No of tickets</label>
+      <input name="tickets" required type="number" id="tickets" placeholder="No of tickets">
+    </div>
+    <!-- <div class="more-inputs"></div>
   <div class="more-people">
     <p>+ Add person</p>
-  </div>
-  <div class="input mpesa">
-    <label for="org">Mpesa Confirmation Code (Paybill: 5242257)</label>
-    <input name="Organization" required type="text" id="org" placeholder="Mpesa Confirmation Code">
-  </div>
-  <div class="note info">
-    <p>Sunday 3pm is a crowd favourite! Join the group?</p>
-  </div>
-  <div class="input">
-    <label for="day">Pick The Day</label>
-    <select required name="day" id="day">
-      <option selected value="">---</option>
-      <option value="Sunday 11">Sunday 11<sup>th</sup></option>
-      <option value="Sunday 18">Sunday 18<sup>th</sup></option>
-      <option value="Sunday 25">Sunday 25<sup>th</sup></option>
-    </select>
-  </div>
-  <div class="input">
-    <label for="time">Pick Time Slot</label>
-    <select required name="time-slot" id="time">
-      <option disabled selected value="">---</option>
-      <option disabled value="11am">11am (Sold Out)</option>
-      <option value="3pm">3pm</option>
-    </select>
-  </div>
-  <div class="note">
-    <p>Visitors must arrive 15-30 minutes before.</p>
-    <p> Meeting point: Karura Forest Gate C Entrance, Kiambu Road</p>
-    <p>Contact: 0712443592</p>
-  </div>
-  <button id="submit" type="submit">Book</button>
+  </div> -->
+    <button id="submit" type="submit">Book</button>
   </form>
 </div>
 {% endblock %}

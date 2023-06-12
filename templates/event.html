@@ -15,19 +15,19 @@ Create Event
   <form action="{{ url_for('create_event') }}" method="post">
     <div class="input extend">
       <label for="event-name">Event Name</label>
-      <input type="text" name="event-name" id="event-name" placeholder="Name of the event">
+      <input required type="text" name="event-name" id="event-name" placeholder="Name of the event">
     </div>
     <div class="input">
       <label for="event-date">Event Date</label>
-      <input type="date" name="event-date" id="event-date">
+      <input required type="date" name="event-date" id="event-date">
     </div>
     <div class="input">
       <label for="event-time">Start Time</label>
-      <input type="time" name="event-time" id="event-time">
+      <input required type="time" name="event-time" id="event-time">
     </div>
     <div class="input extend">
       <label for="tickets">Available tickets</label>
-      <input type="number" name="tickets" id="tickets" placeholder="No of available tickets">
+      <input required type="number" name="tickets" id="tickets" placeholder="No of available tickets">
     </div>
     <button class="extend" type="submit">Create Event</button>
   </form>

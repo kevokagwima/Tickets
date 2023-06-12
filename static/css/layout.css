@@ -136,6 +136,7 @@ header {
   max-width: max-content;
   min-width: 25rem;
   margin: 0 auto;
+  text-align: center;
 }
 
 .alert-success {

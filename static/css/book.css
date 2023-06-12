@@ -3,38 +3,47 @@ a {
 }
 
 .form {
-  padding: 1rem;
+  padding: 2rem 1rem;
 }
 
 .header {
   text-align: center;
   font-family: var(--header-font);
   font-size: 5ch;
-  color: var(--main-bgcolor);
+  color: var(--highlight-bgcolor);
+}
+
+.event-box {
+  padding: 1rem;
+  border-radius: 0.3rem;
+  background-color: var(--main-bgcolor);
+  margin: 2rem auto 0;
+  max-width: max-content;
+  min-width: 34rem;
+  box-shadow: 0 0 10px -8px rgba(0, 0, 0, 0.426);
+  text-align: center;
+}
+
+.event-box h4 {
+  font-family: var(--header-font);
+  font-size: 3ch;
+}
+
+.event-box p {
+  margin-top: 0.5rem;
+  font-family: var(--paragraph-font);
 }
 
 form {
   max-width: max-content;
-  margin: 0 auto;
+  margin: 2rem auto 0;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
   background-color: var(--main-bgcolor);
   padding: 2rem;
   border-radius: 0.3rem;
-  box-shadow: 0 0 10px -8px black;
-}
-
-.more-inputs {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
-}
-
-.more-inputs h4 {
-  grid-column: 1/3;
-  font-family: var(--header-font);
-  text-align: center;
+  box-shadow: 0 0 10px -8px rgba(0, 0, 0, 0.426);
 }
 
 .input {
@@ -43,10 +52,7 @@ form {
 }
 
 form button,
-.note,
-.mpesa,
-.more-inputs,
-.more-people {
+.note {
   grid-column: 1/3;
 }
 
@@ -62,55 +68,12 @@ select {
   border-radius: 0.3rem;
   font-family: var(--paragraph-font);
   font-size: 2ch;
-  outline: 1px solid whitesmoke;
   background-color: var(--sec-bgcolor);
 }
 
 input:focus,
 select:focus {
   outline: 2px solid var(--highlight-bgcolor);
-}
-
-.note {
-  padding: 1rem;
-  border-radius: 0.3rem;
-  background-color: grey;
-  grid-column: 1/3;
-  font-family: var(--paragraph-font);
-  color: var(--main-bgcolor);
-  display: grid;
-  place-items: center;
-  gap: 0.6rem;
-  text-align: center;
-}
-
-.info {
-  padding: 0.5rem;
-  color: #31708f;
-  background-color: #d9edf7;
-  animation: pulse 1s infinite ease-in-out;
-}
-
-.more-people {
-  padding: 0.1rem;
-  color: var(--highlight-bgcolor);
-  text-align: center;
-  font-family: var(--links-font);
-  cursor: pointer;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(0.9);
-  }
-
-  100% {
-    transform: scale(1);
-  }
 }
 
 form button {

@@ -57,12 +57,16 @@
   font-size: 1.8ch;
 }
 
-#tickets {
-  font-family: var(--paragraph-font);
+.tickets-box {
+  margin-top: 1rem;
+  display: grid;
 }
 
-#tickets > span {
-  font-size: 2.5ch;
-  font-family: var(--header-font);
-  color: var(--highlight-bgcolor);
+#tickets {
+  font-family: var(--paragraph-font);
+  text-align: center;
+  background-color: var(--highlight-bgcolor);
+  color: var(--main-bgcolor);
+  padding: 0.4rem 0.6rem;
+  border-radius: 0.2rem;
 }

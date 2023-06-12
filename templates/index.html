@@ -25,9 +25,11 @@ Home
         <h4>{{ event.name }}</h4>
         <div class="event-dates">
           <p>Date: {{ event.date.strftime("%d-%m-%Y") }}</p>
-          <p>Time: {{ event.time }}</p>
+          <p>Time: {{ event.time.strftime("%I:%M %p") }}</p>
         </div>
-        <p id="tickets"><span>{{ event.tickets }}</span> tickets</p>
+        <div class="tickets-box">
+          <a id="tickets" href="{{ url_for('tickets', event_id=event.id) }}">Get Tickets</a>
+        </div>
       </div>
     </div>
     {% endfor %}
