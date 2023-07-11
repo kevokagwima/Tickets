@@ -92,15 +92,78 @@ header {
   max-height: 2.5rem;
 }
 
+.links-box {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+
 .links {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 #link {
+  color: var(--highlight-bgcolor);
+  font-size: 2ch;
+  font-family: var(--paragraph-font);
+}
+
+.account {
+  position: relative;
+  cursor: pointer;
+}
+
+.account-info {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.account-info p {
+  background-color: var(--highlight-bgcolor);
+  border-radius: 30rem;
   color: var(--main-bgcolor);
-  font-size: 3ch;
+  padding: 0.1rem 0.5rem;
+  font-size: 1.5ch;
+  text-transform: capitalize;
+  height: max-content;
+  font-family: var(--links-font);
+}
+
+.account img {
+  height: 2.5rem;
+}
+
+.bookings {
+  position: absolute;
+  top: 4rem;
+  right: 0;
+  background-color: var(--main-bgcolor);
+  box-shadow: 0 0 10px -6px rgba(0, 0, 0, 0.2);
+  border-radius: 0.2rem;
+  display: none;
+}
+
+.show-bookings {
+  display: block;
+}
+
+.booking p {
+  min-width: 10vw;
+  font-family: var(--paragraph-font);
+  padding: 0.5rem 0.7rem;
+  color: black;
+}
+
+.booking p:hover {
+  background-color: var(--highlight-bgcolor);
+  color: var(--main-bgcolor);
+}
+
+#logout:hover {
+  background-color: red;
 }
 
 .tops {
@@ -113,7 +176,9 @@ header {
   max-width: 60rem;
   margin: 0 auto;
   padding: 2px 0 0;
-  animation: fade-away 1s 4s forwards;
+  display: grid;
+  gap: 0.2rem;
+  animation: fade-away 1s 6s forwards;
 }
 
 @keyframes fade-away {

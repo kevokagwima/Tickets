@@ -13,12 +13,24 @@ Registration
 <div class="form">
   <h4>Sign Up</h4>
   <form method="post">
-    {{ form.hidden_tag() }}
+    {{ form.csrf_token }}
     <div class="input">
-      {{ form.username.label }}
-      {{ form.username(placeholder="Enter Username") }}
+      {{ form.first_name.label }}
+      {{ form.first_name(placeholder="Enter First Name") }}
     </div>
     <div class="input">
+      {{ form.surname.label }}
+      {{ form.surname(placeholder="Enter Surname") }}
+    </div>
+    <div class="input">
+      {{ form.email_address.label }}
+      {{ form.email_address(placeholder="Enter Email Address") }}
+    </div>
+    <div class="input">
+      {{ form.phone_number.label }}
+      {{ form.phone_number(placeholder="Enter Phone Number") }}
+    </div>
+    <div class="input two">
       {{ form.account.label }}
       {{ form.account }}
     </div>
@@ -33,6 +45,7 @@ Registration
     <button class="btn" type="submit">
       <span class="button--text">SIGN UP</span>
     </button>
+    <span id="info">Already have an account? <a href="{{ url_for('login') }}">Sign In</a> here</span>
   </form>
 </div>
 

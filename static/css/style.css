@@ -6,10 +6,9 @@
 
 #header {
   font-family: var(--header-font);
-  display: grid;
-  grid-auto-flow: column;
-  justify-content: space-between;
+  display: flex;
   align-items: center;
+  gap: 1rem;
 }
 
 #header > #event-link {
@@ -43,9 +42,21 @@
   padding: 1rem;
 }
 
-.event h4 {
+.event-info h4 {
   font-family: var(--header-font);
   font-size: 2.5ch;
+}
+
+.event-info > p {
+  font-family: var(--paragraph-font);
+  font-size: 2ch;
+  margin-top: 0.3rem;
+}
+
+.event-info hr {
+  margin: 0.5rem 0;
+  border: none;
+  outline: 1px solid var(--sec-bgcolor);
 }
 
 .event-dates {
@@ -53,13 +64,25 @@
   justify-content: space-between;
   align-items: center;
   font-family: var(--links-font);
-  padding: 0.6rem 0;
-  font-size: 1.8ch;
+  font-size: 1.6ch;
+  margin-top: 0.6rem;
 }
 
 .tickets-box {
   margin-top: 1rem;
   display: grid;
+  grid-auto-flow: column;
+  align-items: center;
+}
+
+.tickets-box p {
+  font-family: var(--links-font);
+}
+
+.tickets-box p > span {
+  color: var(--highlight-bgcolor);
+  font-family: var(--header-font);
+  font-size: 2.5ch;
 }
 
 #tickets {

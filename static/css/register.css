@@ -14,19 +14,23 @@
 }
 
 form {
-  padding: 3rem;
+  padding: 2rem;
   max-width: max-content;
   margin: 2rem auto 0;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-  background-color: var(--sec-bgcolor);
+  gap: 1.5rem;
+  background-color: var(--main-bgcolor);
   border-radius: 0.3rem;
 }
 
 .input {
   display: grid;
   gap: 0.6rem;
+}
+
+.two {
+  grid-column: 1/3;
 }
 
 label {
@@ -40,12 +44,12 @@ input,
 select {
   padding: 0.8em 1em;
   min-width: 15vw;
-  border-radius: 10rem;
+  border-radius: 0.3rem;
   font-size: 1.2rem;
   border: none;
-  font-family: system-ui;
+  font-family: var(--paragraph-font);
   letter-spacing: 1px;
-  background-color: var(--main-bgcolor);
+  background-color: var(--sec-bgcolor);
 }
 
 input:focus,
@@ -58,7 +62,7 @@ input::placeholder {
 }
 
 .btn {
-  margin-top: 2rem;
+  margin-top: 1rem;
   color: var(--main-bgcolor);
   border: none;
   font-family: system-ui;
@@ -70,4 +74,14 @@ input::placeholder {
   position: relative;
   background-color: var(--highlight-bgcolor);
   grid-column: 1/3;
+}
+
+#info {
+  font-family: var(--paragraph-font);
+  text-align: center;
+  grid-column: 1/3;
+}
+
+#info a {
+  color: var(--highlight-bgcolor);
 }
