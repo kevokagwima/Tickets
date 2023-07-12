@@ -30,7 +30,7 @@ def load_user(user_id):
 
 @app.route("/register", methods=["POST", "GET"])
 def register():
-  form = Registration()
+  form = RegistrationForm()
   form.account.choices = [(role.id, role.role_name) for role in Role.query.all()]
   if request.method == "POST":
     if form.validate_on_submit():
@@ -55,7 +55,7 @@ def register():
 
 @app.route("/login", methods=["POST", "GET"])
 def login():
-  form = Login()
+  form = LoginForm()
   if request.method == "POST":
     if form.validate_on_submit():
       user = Users.query.filter_by(email=form.email_address.data).first()
@@ -82,27 +82,36 @@ def home():
 @app.route("/create-event", methods=["POST", "GET"])
 @login_required
 def create_event():
+  form = EventCreationForm()
   roles = Role.query.all()
-  if request.method == "POST":
+  if form.validate_on_submit():
     todays_date = date.today()
-    event_date = request.form.get("event-date")
-    if event_date < str(todays_date):
-      flash("Invalid event date", category="danger")
+    start_date = form.start_date.data
+    end_date = form.end_date.data
+    if str(start_date) < str(todays_date):
+      flash("Start date cannot be before current date", category="danger")
+      return redirect(url_for('create_event'))
+    elif end_date < start_date:
+      flash("End Date cannot be before start date", category="danger")
       return redirect(url_for('create_event'))
     else:
       new_event = Event(
-        name = request.form.get("event-name"),
-        date = event_date,
-        time = request.form.get("event-time"),
-        price = request.form.get("price"),
-        location = request.form.get("location"),
-        tickets = request.form.get("tickets"),
+        name = form.name.data,
+        tagline = form.tagline.data,
+        start_date = start_date,
+        end_date = end_date,
+        start_time = form.start_time.data,
+        end_time = form.end_time.data,
+        price = form.price.data,
+        location = form.location.data,
+        tickets = form.no_of_tickets.data,
+        user = current_user.id
       )
       db.session.add(new_event)
       db.session.commit()
       flash(f"Event '{new_event.name}' created successfully", category="success")
       return redirect(url_for('home'))
-  return render_template("event.html", roles=roles)
+  return render_template("event.html", roles=roles, form=form)
 
 @app.route("/tickets/<int:event_id>", methods=["POST", "GET"])
 def tickets(event_id):

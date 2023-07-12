@@ -1,12 +1,12 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, PasswordField, SelectField
+from wtforms import StringField, IntegerField, PasswordField, SelectField, DateField, TimeField
 from flask_wtf.csrf import CSRFProtect
 from wtforms.validators import Length, EqualTo, Email, DataRequired, ValidationError
 from models import Users, Role
 
 csrf = CSRFProtect()
 
-class Registration(FlaskForm):
+class RegistrationForm(FlaskForm):
   first_name = StringField(label="First Name", validators=[DataRequired()])
   surname = StringField(label="Surname", validators=[DataRequired()])
   phone_number = StringField(label="Phone Number", validators=[Length(min=10, max=10, message="Invalid Phone Number"), DataRequired()])
@@ -32,6 +32,17 @@ class Registration(FlaskForm):
     if email:
       raise ValidationError("Email Address already exists, Please try another one")
 
-class Login(FlaskForm):
+class LoginForm(FlaskForm):
   email_address = StringField(label="Email Address", validators=[DataRequired()])
   password = PasswordField(label="Password", validators=[DataRequired()])
+
+class EventCreationForm(FlaskForm):
+  name = StringField(label="Event Name",validators=[DataRequired()])
+  tagline = StringField(label="Event Tagline",validators=[DataRequired()])
+  start_date = DateField(label="Start Date", validators=[DataRequired()])
+  end_date = DateField(label="End Date", validators=[DataRequired()])
+  start_time = TimeField(label="Start Time", validators=[DataRequired()])
+  end_time = TimeField(label="End Time", validators=[DataRequired()])
+  location = StringField(label="Event Location",validators=[DataRequired()])
+  price = IntegerField(label="Ticket Price",validators=[DataRequired()])
+  no_of_tickets = IntegerField(label="Available Tickets",validators=[DataRequired()])

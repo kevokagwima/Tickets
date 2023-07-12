@@ -12,32 +12,49 @@ Create Event
 {% block body %}
 <div class="event-registration">
   <h1>Tell us about your event</h1>
-  <form action="{{ url_for('create_event') }}" method="post">
+  <form method="post">
+    {{ form.csrf_token }}
     <div class="input extend">
-      <label for="event-name">Event Name</label>
-      <input required type="text" name="event-name" id="event-name" placeholder="Name of the event">
-    </div>
-    <div class="input">
-      <label for="event-date">Event Date</label>
-      <input required type="date" name="event-date" id="event-date">
-    </div>
-    <div class="input">
-      <label for="event-time">Start Time</label>
-      <input required type="time" name="event-time" id="event-time">
-    </div>
-    <div class="input">
-      <label for="event-loc">Event Location</label>
-      <input required type="text" name="location" id="event-loc" placeholder="Event Venue">
-    </div>
-    <div class="input">
-      <label for="event-price">Event Price</label>
-      <input required type="number" name="price" id="event-price" placeholder="Event Price">
+      {{ form.name.label }}
+      {{ form.name(placeholder="Name of the event") }}
     </div>
     <div class="input extend">
-      <label for="tickets">Available tickets</label>
-      <input required type="number" name="tickets" id="tickets" placeholder="No of available tickets">
+      {{ form.tagline.label }}
+      {{ form.tagline(placeholder="Tagline of the event") }}
     </div>
-    <button class="extend" type="submit">Create Event</button>
+    <div class="input">
+      {{ form.start_date.label }}
+      {{ form.start_date }}
+    </div>
+    <div class="input">
+      {{ form.end_date.label }}
+      {{ form.end_date }}
+    </div>
+    <div class="input">
+      {{ form.start_time.label }}
+      {{ form.start_time }}
+    </div>
+    <div class="input">
+      {{ form.end_time.label }}
+      {{ form.end_time }}
+    </div>
+    <div class="input extend">
+      {{ form.location.label }}
+      {{ form.location(placeholder="Event Venue") }}
+    </div>
+    <div class="input">
+      {{ form.price.label }}
+      {{ form.price(placeholder="Ticket Price") }}
+    </div>
+    <div class="input">
+      {{ form.no_of_tickets.label }}
+      {{ form.no_of_tickets(placeholder="No of available tickets") }}
+    </div>
+    <button class="btn extend" type="submit">
+      <span class="button--text">Create Event</span>
+    </button>
   </form>
 </div>
+
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
 {% endblock %}

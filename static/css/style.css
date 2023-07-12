@@ -23,7 +23,8 @@
 .events-box {
   margin-top: 2rem;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
   gap: 2rem;
 }
 
@@ -31,65 +32,109 @@
   border-radius: 0.2rem;
   background-color: var(--main-bgcolor);
   overflow: hidden;
+  display: flex;
+}
+
+.image-box {
+  max-height: 100%;
+  max-width: 20rem;
+  overflow: hidden;
 }
 
 .image-box img {
-  max-height: 10rem;
-  min-width: 100%;
+  height: 100%;
+  width: 20rem;
+  object-fit: cover;
+  object-position: center;
 }
 
 .event-info {
   padding: 1rem;
+  width: 100%;
 }
 
-.event-info h4 {
+.event-header h1 {
   font-family: var(--header-font);
-  font-size: 2.5ch;
+  font-size: 4ch;
 }
 
-.event-info > p {
-  font-family: var(--paragraph-font);
-  font-size: 2ch;
-  margin-top: 0.3rem;
+.event-header h4 {
+  font-size: 2.2ch;
+  font-family: var(--links-font);
+  font-weight: lighter;
+}
+
+.event-loc {
+  font-family: var(--header-font);
+  font-size: 2.2ch;
+  margin: 1rem 0;
+  color: var(--highlight-bgcolor);
 }
 
 .event-info hr {
-  margin: 0.5rem 0;
+  margin: 1rem 0 0.5rem;
   border: none;
   outline: 1px solid var(--sec-bgcolor);
 }
 
 .event-dates {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
   align-items: center;
   font-family: var(--links-font);
-  font-size: 1.6ch;
-  margin-top: 0.6rem;
+  font-size: 1.8ch;
 }
 
 .tickets-box {
-  margin-top: 1rem;
   display: grid;
-  grid-auto-flow: column;
   align-items: center;
+  gap: 0.5rem;
 }
 
-.tickets-box p {
+.tickets-price {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background-color: greenyellow;
+  padding: 0 0.8rem;
+  max-width: max-content;
+  border-radius: 30rem;
+}
+
+.tickets-price img {
+  max-height: 2rem;
+}
+
+.tickets-price h4 {
+  font-size: 2ch;
   font-family: var(--links-font);
 }
 
-.tickets-box p > span {
-  color: var(--highlight-bgcolor);
-  font-family: var(--header-font);
-  font-size: 2.5ch;
+.tickets {
+  margin-top: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 #tickets {
+  padding: 0.6rem;
+  flex-grow: 1;
+  border-radius: 0.2rem;
+  border: none;
+  background-color: var(--highlight-bgcolor);
+  cursor: pointer;
+}
+
+#tickets:nth-child(2) {
+  background-color: teal;
+}
+
+#tickets a {
   font-family: var(--paragraph-font);
   text-align: center;
-  background-color: var(--highlight-bgcolor);
   color: var(--main-bgcolor);
-  padding: 0.4rem 0.6rem;
-  border-radius: 0.2rem;
+  color: white;
+  font-size: 2ch;
 }
