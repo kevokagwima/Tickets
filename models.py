@@ -23,6 +23,8 @@ class Users(db.Model, UserMixin):
   password = db.Column(db.String(100), nullable=False, default="11111")
   role = db.Column(db.Integer(), db.ForeignKey('Roles.id'))
   event = db.relationship("Event", backref="event-owner", lazy=True)
+  booking = db.relationship("Bookings", backref="bookings-owner", lazy=True)
+  qrcode = db.relationship("Qrcodes", backref="qrcode-owner", lazy=True)
 
   @property
   def passwords(self):
@@ -50,6 +52,8 @@ class Event(db.Model):
   price = db.Column(db.Integer(), nullable=False, default=0)
   status = db.Column(db.String(10), nullable=False, default="Active")
   user = db.Column(db.Integer(), db.ForeignKey('Users.id'))
+  booking = db.relationship("Bookings", backref="booking-owners", lazy=True)
+  qrcode = db.relationship("Qrcodes", backref="qrcode-owners", lazy=True)
 
 class Bookings(db.Model):
   __tablename__ = "Bookings"
@@ -59,3 +63,12 @@ class Bookings(db.Model):
   event = db.Column(db.Integer(), db.ForeignKey("event.id"))
   tickets = db.Column(db.Integer(), nullable=False)
   status = db.Column(db.String(10), nullable=False, default="Pending")
+
+class Qrcodes(db.Model):
+  __tablename__ = "qrcodes"
+  id = db.Column(db.Integer(), primary_key=True)
+  unique_id = db.Column(db.Integer(), nullable=False)
+  qrcode = db.Column(db.LargeBinary(), nullable=False)
+  event = db.Column(db.Integer(), db.ForeignKey('event.id'))
+  user = db.Column(db.Integer(), db.ForeignKey('Users.id'))
+  status = db.Column(db.String(10), default="Active")

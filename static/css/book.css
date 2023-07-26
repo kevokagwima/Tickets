@@ -18,7 +18,7 @@ a {
   border-radius: 0.3rem;
   background-color: var(--main-bgcolor);
   margin: 2rem auto 0;
-  max-width: max-content;
+  max-width: 34rem;
   min-width: 34rem;
   box-shadow: 0 0 10px -8px rgba(0, 0, 0, 0.426);
   text-align: center;

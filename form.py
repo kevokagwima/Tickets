@@ -46,3 +46,14 @@ class EventCreationForm(FlaskForm):
   location = StringField(label="Event Location",validators=[DataRequired()])
   price = IntegerField(label="Ticket Price",validators=[DataRequired()])
   no_of_tickets = IntegerField(label="Available Tickets",validators=[DataRequired()])
+
+class EditEventForm(FlaskForm):
+  name = StringField(label="Event Name",validators=[DataRequired()])
+  tagline = StringField(label="Event Tagline",validators=[DataRequired()])
+  start_date = DateField(label="Start Date", validators=[DataRequired()])
+  end_date = DateField(label="End Date", validators=[DataRequired()])
+  start_time = TimeField(label="Start Time", validators=[DataRequired()])
+  end_time = TimeField(label="End Time", validators=[DataRequired()])
+  location = StringField(label="Event Location",validators=[DataRequired()])
+  price = IntegerField(label="Ticket Price",validators=[DataRequired()])
+  no_of_tickets = IntegerField(label="Available Tickets",validators=[DataRequired()])

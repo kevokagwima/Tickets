@@ -1,7 +1,36 @@
+::-webkit-scrollbar {
+  background-color: var(--sec-bgcolor);
+  max-width: 0.3rem;
+}
+
 .events {
-  margin-top: 2rem;
+  margin-top: 1rem;
   padding: 0 2rem;
   position: relative;
+}
+
+.menu-box {
+  max-width: max-content;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: var(--main-bgcolor);
+  border-radius: 30rem;
+  padding: 0.4rem 1rem;
+}
+
+.img-box {
+  cursor: pointer;
+}
+
+.img-box img {
+  max-height: 1.2rem;
+}
+
+.line {
+  height: 1rem;
+  width: 0.1rem;
+  background-color: #212121;
 }
 
 #header {
@@ -20,12 +49,21 @@
   font-size: 0.6ch;
 }
 
+.all-events {
+  margin-top: 1rem;
+  max-height: 40rem;
+  overflow: hidden;
+}
+
 .events-box {
-  margin-top: 2rem;
+  margin-top: 1rem;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   align-items: center;
   gap: 2rem;
+  max-height: 39rem;
+  padding-right: 0.3rem;
+  overflow: scroll;
 }
 
 .event {
@@ -121,7 +159,7 @@
 #tickets {
   padding: 0.6rem;
   flex-grow: 1;
-  border-radius: 0.2rem;
+  border-radius: 30rem;
   border: none;
   background-color: var(--highlight-bgcolor);
   cursor: pointer;
@@ -129,6 +167,10 @@
 
 #tickets:nth-child(2) {
   background-color: teal;
+}
+
+#tickets:nth-child(3) {
+  background-color: red;
 }
 
 #tickets a {

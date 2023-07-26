@@ -1,6 +1,15 @@
-const account = document.querySelector(".account-info");
-const bookings = document.querySelector(".bookings");
+function openView(evt, tab) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(tab).style.display = "block";
+  evt.currentTarget.className += " active";
+}
 
-account.addEventListener("click", () => {
-  bookings.classList.toggle("show-bookings");
-});
+document.getElementById("defaultOpen").click();

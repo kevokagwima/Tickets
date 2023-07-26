@@ -31,7 +31,7 @@ body {
 
 ::-webkit-scrollbar {
   background-color: var(--main-bgcolor);
-  max-width: 0.5rem;
+  max-width: 0.3rem;
 }
 
 ::-webkit-scrollbar-thumb {

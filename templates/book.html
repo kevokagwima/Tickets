@@ -15,9 +15,9 @@
   <div class="event-box">
     <h4>{{ event.name }}</h4>
     <p>
-      {{ event.date.strftime("%d/%m/%Y") }}
+      {{ event.start_date.strftime("%d/%m/%Y") }}
       at
-      {{ event.time.strftime("%I:%M %p") }}
+      {{ event.start_time.strftime("%I:%M %p") }}
     </p>
   </div>
   <form action="{{ url_for('tickets', event_id=event.id) }}" method="post">
