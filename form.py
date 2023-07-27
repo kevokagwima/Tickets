@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, PasswordField, SelectField, DateField, TimeField
+from wtforms import StringField, IntegerField, PasswordField, SelectField, DateField, TimeField, TextAreaField
 from flask_wtf.csrf import CSRFProtect
 from wtforms.validators import Length, EqualTo, Email, DataRequired, ValidationError
 from models import Users, Role
@@ -38,7 +38,8 @@ class LoginForm(FlaskForm):
 
 class EventCreationForm(FlaskForm):
   name = StringField(label="Event Name",validators=[DataRequired()])
-  tagline = StringField(label="Event Tagline",validators=[DataRequired()])
+  tagline = StringField(label="Event Tagline")
+  description = TextAreaField(label="Event Description",validators=[Length(max=1000)])
   start_date = DateField(label="Start Date", validators=[DataRequired()])
   end_date = DateField(label="End Date", validators=[DataRequired()])
   start_time = TimeField(label="Start Time", validators=[DataRequired()])
@@ -49,7 +50,8 @@ class EventCreationForm(FlaskForm):
 
 class EditEventForm(FlaskForm):
   name = StringField(label="Event Name",validators=[DataRequired()])
-  tagline = StringField(label="Event Tagline",validators=[DataRequired()])
+  tagline = StringField(label="Event Tagline")
+  description = TextAreaField(label="Event Description",validators=[Length(max=1000)])
   start_date = DateField(label="Start Date", validators=[DataRequired()])
   end_date = DateField(label="End Date", validators=[DataRequired()])
   start_time = TimeField(label="Start Time", validators=[DataRequired()])

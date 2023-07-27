@@ -12,7 +12,7 @@ Edit Event {{ event.name }}
 {% block body %}
 <div class="event-registration">
   <h1>Tell us about your event</h1>
-  <form method="post" action="{{ url_for('edit_event', event_id=event.unique_id) }}">
+  <form method="post">
     {{ form.csrf_token }}
     <div class="input extend">
       {{ form.name.label }}
@@ -21,6 +21,10 @@ Edit Event {{ event.name }}
     <div class="input extend">
       {{ form.tagline.label }}
       {{ form.tagline(placeholder="Tagline of the event", value=event.tagline) }}
+    </div>
+    <div class="input extend">
+      {{ form.description.label }}
+      {{ form.description(placeholder="Max limit of 1000 characters") }}
     </div>
     <div class="input">
       {{ form.start_date.label }}

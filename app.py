@@ -26,9 +26,11 @@ def load_user(user_id):
 
 @app.before_request
 def event_expiry():
-  all_events = Event.query.all()
+  all_events = Event.query.filter_by(status="Active").all()
   for event in all_events:
-    if event.end_date < date.today():
+    today = date.today()
+    current_time = datetime.now()
+    if event.end_date < today or (event.end_date == today and event.end_time.strftime("%H") < current_time.strftime("%H")):
       event.status = "Ended"
       db.session.commit()
   return None
@@ -107,6 +109,7 @@ def create_event():
       new_event = Event(
         name = form.name.data,
         tagline = form.tagline.data,
+        description = form.description.data,
         start_date = start_date,
         end_date = end_date,
         start_time = form.start_time.data,
@@ -147,7 +150,7 @@ def edit_event(event_id):
   roles = Role.query.all()
   # try:
   event = Event.query.filter_by(unique_id=event_id).first()
-  if request.method == "POST":
+  if form.validate_on_submit():
     todays_date = date.today()
     start_date = form.start_date.data
     end_date = form.end_date.data

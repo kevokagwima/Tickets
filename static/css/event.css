@@ -30,7 +30,8 @@ form {
   font-family: var(--links-font);
 }
 
-.input input {
+.input input,
+.input textarea {
   padding: 1rem;
   border: none;
   font-family: var(--paragraph-font);
@@ -39,6 +40,7 @@ form {
   background-color: #ff6a0018;
 }
 
-.input input:focus {
+.input input:focus,
+.input textarea:focus {
   outline: 2px solid var(--highlight-bgcolor);
 }

@@ -12,21 +12,23 @@ Home
 {% block body %}
 <div class="events">
   <div class="menu-box">
-    <div id="defaultOpen" class="img-box tablinks" onclick="openView(event, 'upcoming')">
-      <img src="{{ url_for('static', filename='images/upcoming.png') }}" alt="upcoming event">
+    <div class="menu-items">
+      <div id="defaultOpen" class="img-box tablinks" onclick="openView(event, 'upcoming')">
+        <img src="{{ url_for('static', filename='images/upcoming.png') }}" alt="upcoming event">
+      </div>
+      <div class="line"></div>
+      <div class="img-box tablinks" onclick="openView(event, 'past')">
+        <img src="{{ url_for('static', filename='images/past.png') }}" alt="upcoming event">
+      </div>
     </div>
-    <div class="line"></div>
-    <div class="img-box tablinks" onclick="openView(event, 'past')">
-      <img src="{{ url_for('static', filename='images/past.png') }}" alt="upcoming event">
-    </div>
+    {% if current_user.role == 1 %}
+    <a id="event-link" href="{{ url_for('create_event') }}">Create Event</a>
+    {% endif %}
   </div>
   <div class="all-events">
     <div id="upcoming" class="tabcontent">
       <h1 id="header">
         Upcoming Events
-        {% if current_user.role == 1 %}
-        <a id="event-link" href="{{ url_for('create_event') }}">Create Event</a>
-        {% endif %}
       </h1>
       <div class="events-box">
         {% for event in events|sort(attribute='start_date') if event.status == "Active" %}
@@ -54,15 +56,18 @@ Home
               </div>
               <div class="tickets">
                 <button id="tickets">
-                  <a href="{{ url_for('tickets', event_id=event.id) }}">Get Tickets</a>
+                  <a href="{{ url_for('tickets', event_id=event.id) }}">
+                    <img src="{{ url_for('static', filename='Images/tickets.png') }}" alt="Edit Event">
+                    Get Tickets
+                  </a>
                 </button>
                 {% if current_user.role == 1 and event.user == current_user.id %}
-                <button id="tickets">
-                  <a href="{{ url_for('edit_event', event_id=event.unique_id) }}">Edit</a>
-                </button>
-                <button id="tickets">
-                  <a href="{{ url_for('delete_event', event_id=event.unique_id) }}">Delete</a>
-                </button>
+                <a id="ticket" href="{{ url_for('edit_event', event_id=event.unique_id) }}">
+                  <img src="{{ url_for('static', filename='Images/editing.png') }}" alt="Edit Event">
+                </a>
+                <a id="ticket" href="{{ url_for('delete_event', event_id=event.unique_id) }}">
+                  <img src="{{ url_for('static', filename='Images/delete.png') }}" alt="Edit Event">
+                </a>
                 {% endif %}
               </div>
             </div>
@@ -74,12 +79,9 @@ Home
     <div id="past" class="tabcontent">
       <h1 id="header">
         Past Events
-        {% if current_user.role == 1 %}
-        <a id="event-link" href="{{ url_for('create_event') }}">Create Event</a>
-        {% endif %}
       </h1>
       <div class="events-box">
-        {% for event in events|sort(attribute='start_date') if event.status == "Ended" %}
+        {% for event in events|sort(attribute='end_date', reverse=True) if event.status == "Ended" %}
         <div class="event">
           <div class="image-box">
             <img src="../static/images/banner.png" alt="event-img">

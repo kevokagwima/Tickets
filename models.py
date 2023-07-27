@@ -43,6 +43,7 @@ class Event(db.Model):
   unique_id = db.Column(db.Integer(), nullable=False, default=random.randint(100000,999999))
   name = db.Column(db.String(100), nullable=False)
   tagline = db.Column(db.String(100))
+  description = db.Column(db.String(1000))
   start_date = db.Column(db.Date(), nullable=False)
   end_date = db.Column(db.Date(), nullable=False)
   start_time = db.Column(db.Time(), nullable=False)
