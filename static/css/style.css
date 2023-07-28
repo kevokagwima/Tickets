@@ -100,15 +100,47 @@
   width: 100%;
 }
 
+.event-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .event-header h1 {
   font-family: var(--header-font);
   font-size: 4ch;
 }
 
-.event-header h4 {
-  font-size: 2.2ch;
-  font-family: var(--links-font);
-  font-weight: lighter;
+.ongoing {
+  color: green;
+  font-family: var(--header-font);
+}
+
+#ongoing {
+  opacity: 0;
+  animation: fade 1.3s infinite forwards;
+}
+
+#ongoing:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+#ongoing:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
 
 .event-loc {

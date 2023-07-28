@@ -39,6 +39,15 @@ Home
           <div class="event-info">
             <div class="event-header">
               <h1>{{ event.name }}</h1>
+              {% if (event.start_date < today and event.start_time.strftime("%H:%M") < current_time.strftime("%H:%M"))
+                or (event.start_date==today and event.start_time.strftime("%H:%M") < current_time.strftime("%H:%M")) %}
+                <p class="ongoing">
+                Ongoing
+                <span id="ongoing">.</span>
+                <span id="ongoing">.</span>
+                <span id="ongoing">.</span>
+                </p>
+                {% endif %}
             </div>
             <p class="event-loc">Location: {{ event.location }}</p>
             <div class="event-dates">

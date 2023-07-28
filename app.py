@@ -30,7 +30,7 @@ def event_expiry():
   for event in all_events:
     today = date.today()
     current_time = datetime.now()
-    if event.end_date < today or (event.end_date == today and event.end_time.strftime("%H") < current_time.strftime("%H")):
+    if event.end_date < today or (event.end_date == today and event.end_time.strftime("%H:%M") < current_time.strftime("%H:%M")):
       event.status = "Ended"
       db.session.commit()
   return None
@@ -84,7 +84,9 @@ def login():
 def home():
   events = Event.query.all()
   roles = Role.query.all()
-  return render_template("index.html", events=events, roles=roles)
+  today = date.today()
+  current_time = datetime.now()
+  return render_template("index.html", events=events, roles=roles, today=today, current_time=current_time)
 
 @app.route("/create-event", methods=["POST", "GET"])
 @login_required
@@ -121,27 +123,27 @@ def create_event():
       )
       db.session.add(new_event)
       db.session.commit()
-      for i in range(new_event.tickets):
-        generate_qrcode(new_event.id)
+      generate_qrcode(new_event.id, new_event.tickets)
       flash(f"Event '{new_event.name}' created successfully", category="success")
       return redirect(url_for('home'))
   return render_template("event.html", roles=roles, form=form)
 
-def generate_qrcode(event_id):
-  qr = qrcode.QRCode(version=1, box_size=10, border=4)
-  qr.add_data('https://www.example.com')
-  qr.make(fit=True)
-  img = qr.make_image(fill_color='black', back_color='white')
-  bytes_io = io.BytesIO()
-  img.save(bytes_io)
-  image_bytes = bytes_io.getvalue() 
-  new_qrcode = Qrcodes(
-    event = event_id,
-    qrcode = image_bytes,
-    unique_id = random.randint(100000000,999999999)
-  )
-  db.session.add(new_qrcode)
-  db.session.commit()
+def generate_qrcode(event_id, no_of_tickets):
+  for i in range(no_of_tickets):
+    qr = qrcode.QRCode(version=1, box_size=10, border=4)
+    qr.add_data('https://www.example.com')
+    qr.make(fit=True)
+    img = qr.make_image(fill_color='black', back_color='white')
+    bytes_io = io.BytesIO()
+    img.save(bytes_io)
+    image_bytes = bytes_io.getvalue() 
+    new_qrcode = Qrcodes(
+      event = event_id,
+      qrcode = image_bytes,
+      unique_id = random.randint(100000000,999999999)
+    )
+    db.session.add(new_qrcode)
+    db.session.commit()
 
 @app.route("/edit-event/<int:event_id>", methods=["POST", "GET"])
 @login_required
