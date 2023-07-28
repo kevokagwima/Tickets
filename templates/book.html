@@ -25,6 +25,8 @@
       <label for="tickets">No of tickets</label>
       <input name="tickets" required type="number" id="tickets" placeholder="No of tickets">
     </div>
+    {% if current_user.is_authenticated %}
+    {% else %}
     <div class="input">
       <label for="fname">First Name</label>
       <input name="fname" required type="text" id="fname" placeholder="First Name">
@@ -41,6 +43,7 @@
       <label for="phone">Phone Number</label>
       <input name="phone" required type="number" id="phone" placeholder="Phone Number">
     </div>
+    {% endif %}
     <!-- <div class="more-inputs"></div>
   <div class="more-people">
     <p>+ Add person</p>

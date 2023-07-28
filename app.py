@@ -202,9 +202,18 @@ def tickets(event_id):
   roles = Role.query.all()
   if event:
     if request.method == "POST":
-      users_phone = request.form.get("phone")
-      existing_user = Users.query.filter_by(phone=users_phone).first()
-      if existing_user is None:
+      if current_user.is_authenticated:
+        new_booking = Bookings(
+          user = current_user.id,
+          event = event.id,
+          tickets = request.form.get("tickets")
+        )
+        db.session.add(new_booking)
+        event.tickets = event.tickets - int(new_booking.tickets)
+        db.session.commit()
+        flash("Your tickets are ready", category="success")
+        return redirect(url_for('home'))
+      else:
         new_user = Users(
           first_name = request.form.get("fname"),
           surname = request.form.get("sname"),
@@ -219,6 +228,7 @@ def tickets(event_id):
           tickets = request.form.get("tickets")
         )
         db.session.add(new_booking)
+        event.tickets = event.tickets - new_booking.tickets
         db.session.commit()
         flash("Your tickets are ready", category="success")
         return redirect(url_for('home'))

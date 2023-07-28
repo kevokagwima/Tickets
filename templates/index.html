@@ -49,7 +49,15 @@ Home
                 </p>
                 {% endif %}
             </div>
-            <p class="event-loc">Location: {{ event.location }}</p>
+            <p class="event-loc">
+              Location: {{ event.location }}
+              <span>
+                {{ "{:,}".format(event.tickets) }}
+                {% if event.tickets == 1 %}
+                ticket{% else %}tickets{% endif %}
+                remaining
+              </span>
+            </p>
             <div class="event-dates">
               <p>Start Date: <b>{{ event.start_date.strftime("%d/%m/%Y") }}</b></p>
               <p>End Date: <b>{{ event.end_date.strftime("%d/%m/%Y") }}</b></p>
@@ -74,9 +82,9 @@ Home
                 <a id="ticket" href="{{ url_for('edit_event', event_id=event.unique_id) }}">
                   <img src="{{ url_for('static', filename='Images/editing.png') }}" alt="Edit Event">
                 </a>
-                <a id="ticket" href="{{ url_for('delete_event', event_id=event.unique_id) }}">
+                <!-- <a id="ticket" href="{{ url_for('delete_event', event_id=event.unique_id) }}">
                   <img src="{{ url_for('static', filename='Images/delete.png') }}" alt="Edit Event">
-                </a>
+                </a> -->
                 {% endif %}
               </div>
             </div>

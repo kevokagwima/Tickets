@@ -37,6 +37,11 @@
             <a href="#">
               <p> My Tickects</p>
             </a>
+            {% if current_user.role == 1 %}
+            <a href="#">
+              <p> My Events</p>
+            </a>
+            {% endif %}
             <a href="{{ url_for('logout') }}">
               <p id="logout">Logout</p>
             </a>

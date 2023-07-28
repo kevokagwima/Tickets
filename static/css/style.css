@@ -148,6 +148,18 @@
   font-size: 2.2ch;
   margin: 1rem 0;
   color: var(--highlight-bgcolor);
+  display: grid;
+  gap: 0.5rem;
+}
+
+.event-loc > span {
+  font-size: 1ch;
+  font-family: var(--paragraph-font);
+  background-color: green;
+  color: var(--sec-bgcolor);
+  padding: 0.2rem 0.6rem;
+  border-radius: 30rem;
+  max-width: max-content;
 }
 
 .event-info hr {
