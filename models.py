@@ -69,7 +69,7 @@ class Qrcodes(db.Model):
   __tablename__ = "qrcodes"
   id = db.Column(db.Integer(), primary_key=True)
   unique_id = db.Column(db.Integer(), nullable=False)
-  qrcode = db.Column(db.LargeBinary(), nullable=False)
+  qrcode = db.Column(db.String(100), nullable=False)
   event = db.Column(db.Integer(), db.ForeignKey('event.id'))
   user = db.Column(db.Integer(), db.ForeignKey('Users.id'))
   status = db.Column(db.String(10), default="Active")

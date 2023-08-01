@@ -3,7 +3,7 @@ from flask_login import login_manager, LoginManager, login_user, logout_user, cu
 from models import * 
 from form import *
 from datetime import datetime, date
-import qrcode, io
+import qrcode, io, os, shutil
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "fvjdnjkdsnsnd"
@@ -11,11 +11,17 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "mssql+pyodbc://KEVINKAGWIMA/tickets?dri
 # app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://kevokagwima:Hunter1234@kevokagwima.mysql.pythonanywhere-services.com/kevokagwima$tickets"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
+UPLOAD_FOLDER = 'static/images/Qr_codes'
+UPLOAD_FOLDER = UPLOAD_FOLDER
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 login_manager = LoginManager()
 login_manager.login_view = '/login'
 login_manager.login_message = "Please login to access this page"
 login_manager.login_message_category = "danger"
 login_manager.init_app(app)
+
+if not os.path.exists(UPLOAD_FOLDER):
+  os.makedirs(UPLOAD_FOLDER)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -128,22 +134,31 @@ def create_event():
       return redirect(url_for('home'))
   return render_template("event.html", roles=roles, form=form)
 
-def generate_qrcode(event_id, no_of_tickets):
-  for i in range(no_of_tickets):
-    qr = qrcode.QRCode(version=1, box_size=10, border=4)
-    qr.add_data('https://www.example.com')
-    qr.make(fit=True)
-    img = qr.make_image(fill_color='black', back_color='white')
-    bytes_io = io.BytesIO()
-    img.save(bytes_io)
-    image_bytes = bytes_io.getvalue() 
+def allowed_file(filename):
+  return '.' in filename and \
+    filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def generate_qrcode(event_id, tickets):
+  event = Event.query.get(event_id)
+  for i in range(tickets):
     new_qrcode = Qrcodes(
       event = event_id,
-      qrcode = image_bytes,
       unique_id = random.randint(100000000,999999999)
     )
     db.session.add(new_qrcode)
+    qrcode_name = f'{event.name}-{new_qrcode.unique_id}'
+    new_qrcode.qrcode = qrcode_name
     db.session.commit()
+    qr = qrcode.QRCode(version=1, box_size=10, border=4)
+    qr.make(fit=True)
+    qr.add_data(qrcode_name)
+    folder = f"{event.name}"
+    if not os.path.exists(folder):
+      os.makedirs(folder)
+    filename = os.path.join(folder, f'{qrcode_name}.png')
+    img = qr.make_image(fill_color='black', back_color='white')
+    img.save(filename)
+  shutil.move(folder, UPLOAD_FOLDER)
 
 @app.route("/edit-event/<int:event_id>", methods=["POST", "GET"])
 @login_required

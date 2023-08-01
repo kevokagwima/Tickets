@@ -55,6 +55,11 @@
   font-size: 1.5ch;
 }
 
+#no-events {
+  font-family: var(--paragraph-font);
+  color: red;
+}
+
 .all-events {
   margin-top: 1rem;
   max-height: 40rem;
@@ -109,6 +114,9 @@
 .event-header h1 {
   font-family: var(--header-font);
   font-size: 4ch;
+  max-width: 20rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .ongoing {
