@@ -6,58 +6,15 @@
 {% endblock %}
 
 {% block title %}
-Create Event
+{{ event.name }}
 {% endblock %}
 
 {% block body %}
-<div class="event-registration">
-  <h1>Tell us about your event</h1>
-  <form method="post">
-    {{ form.csrf_token }}
-    <div class="input extend">
-      {{ form.name.label }}
-      {{ form.name(placeholder="Name of the event") }}
-    </div>
-    <div class="input extend">
-      {{ form.tagline.label }}
-      {{ form.tagline(placeholder="Tagline of the event") }}
-    </div>
-    <div class="input extend">
-      {{ form.description.label }}
-      {{ form.description(placeholder="Max limit of 1000 characters") }}
-    </div>
-    <div class="input">
-      {{ form.start_date.label }}
-      {{ form.start_date }}
-    </div>
-    <div class="input">
-      {{ form.end_date.label }}
-      {{ form.end_date }}
-    </div>
-    <div class="input">
-      {{ form.start_time.label }}
-      {{ form.start_time }}
-    </div>
-    <div class="input">
-      {{ form.end_time.label }}
-      {{ form.end_time }}
-    </div>
-    <div class="input extend">
-      {{ form.location.label }}
-      {{ form.location(placeholder="Event Venue") }}
-    </div>
-    <div class="input">
-      {{ form.price.label }}
-      {{ form.price(placeholder="Ticket Price") }}
-    </div>
-    <div class="input">
-      {{ form.no_of_tickets.label }}
-      {{ form.no_of_tickets(placeholder="No of available tickets") }}
-    </div>
-    <button class="btn extend" type="submit">
-      <span class="button--text">Create Event</span>
-    </button>
-  </form>
+<div class="container">
+  <div class="heading">
+    <h1>{{ event.name }}</h1>
+    <h4>{{ event.tagline }}</h4>
+  </div>
 </div>
 
 <script src="{{ url_for('static', filename='js/auth.js') }}"></script>

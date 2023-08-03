@@ -3,7 +3,7 @@ from flask_login import login_manager, LoginManager, login_user, logout_user, cu
 from models import * 
 from form import *
 from datetime import datetime, date
-import qrcode, io, os, shutil
+import qrcode, os, shutil
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "fvjdnjkdsnsnd"
@@ -132,7 +132,7 @@ def create_event():
       generate_qrcode(new_event.id, new_event.tickets)
       flash(f"Event '{new_event.name}' created successfully", category="success")
       return redirect(url_for('home'))
-  return render_template("event.html", roles=roles, form=form)
+  return render_template("create_event.html", roles=roles, form=form)
 
 def allowed_file(filename):
   return '.' in filename and \
@@ -159,6 +159,16 @@ def generate_qrcode(event_id, tickets):
     img = qr.make_image(fill_color='black', back_color='white')
     img.save(filename)
   shutil.move(folder, UPLOAD_FOLDER)
+
+@app.route("/event-details/<int:event_id>")
+def event_details(event_id):
+  roles = Role.query.all()
+  try:
+    event = Event.query.get(event_id)
+    return render_template("event.html", event=event, roles=roles)
+  except:
+    flash("Event not found", category="danger")
+    return redirect(url_for('home'))
 
 @app.route("/edit-event/<int:event_id>", methods=["POST", "GET"])
 @login_required

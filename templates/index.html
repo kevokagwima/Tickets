@@ -41,59 +41,61 @@ Home
           <div class="image-box">
             <img src="../static/images/banner.png" alt="event-img">
           </div>
-          <div class="event-info">
-            <div class="event-header">
-              <h1>{{ event.name }}</h1>
-              {% if (event.start_date < today and event.start_time.strftime("%H:%M") < current_time.strftime("%H:%M"))
-                or (event.start_date==today and event.start_time.strftime("%H:%M") < current_time.strftime("%H:%M")) %}
-                <p class="ongoing">
-                Ongoing
-                <span id="ongoing">.</span>
-                <span id="ongoing">.</span>
-                <span id="ongoing">.</span>
-                </p>
-                {% endif %}
-            </div>
-            <p class="event-loc">
-              Location: {{ event.location }}
-              <span>
-                {{ "{:,}".format(event.tickets) }}
-                {% if event.tickets == 1 %}
-                ticket{% else %}tickets{% endif %}
-                remaining
-              </span>
-            </p>
-            <div class="event-dates">
-              <p>Start Date: <b>{{ event.start_date.strftime("%d/%m/%Y") }}</b></p>
-              <p>End Date: <b>{{ event.end_date.strftime("%d/%m/%Y") }}</b></p>
-              <p>Start Time: <b>{{ event.start_time.strftime("%I:%M %p") }}</b></p>
-              <p>End Time: <b>{{ event.end_time.strftime("%I:%M %p") }}</b></p>
-            </div>
-            <hr>
-            <div class="tickets-box">
-              <div class="tickets-price">
-                <img src="../static/images/voucher.png" alt="ticket">
-                <h4>
-                  {% if event.price < 100 %} Free {% else %} {{ "Ksh {:,}" .format(event.price) }} {% endif %} </h4>
+          <a href="{{ url_for('event_details', event_id=event.id) }}">
+            <div class="event-info">
+              <div class="event-header">
+                <h1>{{ event.name }}</h1>
+                {% if (event.start_date < today and event.start_time.strftime("%H:%M") < current_time.strftime("%H:%M"))
+                  or (event.start_date==today and event.start_time.strftime("%H:%M") < current_time.strftime("%H:%M"))
+                  %} <p class="ongoing">
+                  Ongoing
+                  <span id="ongoing">.</span>
+                  <span id="ongoing">.</span>
+                  <span id="ongoing">.</span>
+                  </p>
+                  {% endif %}
               </div>
-              <div class="tickets">
-                <button id="tickets">
-                  <a href="{{ url_for('tickets', event_id=event.id) }}">
-                    <img src="{{ url_for('static', filename='Images/tickets.png') }}" alt="Edit Event">
-                    Get Tickets
+              <p class="event-loc">
+                Location: {{ event.location }}
+                <span>
+                  {{ "{:,}".format(event.tickets) }}
+                  {% if event.tickets == 1 %}
+                  ticket{% else %}tickets{% endif %}
+                  remaining
+                </span>
+              </p>
+              <div class="event-dates">
+                <p>Start Date: <b>{{ event.start_date.strftime("%d/%m/%Y") }}</b></p>
+                <p>End Date: <b>{{ event.end_date.strftime("%d/%m/%Y") }}</b></p>
+                <p>Start Time: <b>{{ event.start_time.strftime("%I:%M %p") }}</b></p>
+                <p>End Time: <b>{{ event.end_time.strftime("%I:%M %p") }}</b></p>
+              </div>
+              <hr>
+              <div class="tickets-box">
+                <div class="tickets-price">
+                  <img src="../static/images/voucher.png" alt="ticket">
+                  <h4>
+                    {% if event.price < 100 %} Free {% else %} {{ "Ksh {:,}" .format(event.price) }} {% endif %} </h4>
+                </div>
+                <div class="tickets">
+                  <button id="tickets">
+                    <a href="{{ url_for('tickets', event_id=event.id) }}">
+                      <img src="{{ url_for('static', filename='Images/tickets.png') }}" alt="Edit Event">
+                      Get Tickets
+                    </a>
+                  </button>
+                  {% if current_user.role == 1 and event.user == current_user.id %}
+                  <a id="ticket" href="{{ url_for('edit_event', event_id=event.unique_id) }}">
+                    <img src="{{ url_for('static', filename='Images/editing.png') }}" alt="Edit Event">
                   </a>
-                </button>
-                {% if current_user.role == 1 and event.user == current_user.id %}
-                <a id="ticket" href="{{ url_for('edit_event', event_id=event.unique_id) }}">
-                  <img src="{{ url_for('static', filename='Images/editing.png') }}" alt="Edit Event">
-                </a>
-                <a id="ticket" href="{{ url_for('delete_event', event_id=event.unique_id) }}">
-                  <img src="{{ url_for('static', filename='Images/delete.png') }}" alt="Edit Event">
-                </a>
-                {% endif %}
+                  <a id="ticket" href="{{ url_for('delete_event', event_id=event.unique_id) }}">
+                    <img src="{{ url_for('static', filename='Images/delete.png') }}" alt="Edit Event">
+                  </a>
+                  {% endif %}
+                </div>
               </div>
             </div>
-          </div>
+          </a>
         </div>
         {% endfor %}
         {% else %}
