@@ -44,3 +44,28 @@ form {
 .input textarea:focus {
   outline: 2px solid var(--highlight-bgcolor);
 }
+
+@media screen and (max-width: 400px) {
+  .event-registration h1 {
+    font-size: 4ch;
+  }
+
+  form {
+    grid-template-columns: 1fr;
+    max-width: 100vw;
+    min-width: max-content;
+  }
+
+  .extend {
+    grid-column: 1/2;
+  }
+
+  .input {
+    grid-column: 1/2;
+  }
+
+  .input input,
+  .input textarea {
+    font-size: 2ch;
+  }
+}

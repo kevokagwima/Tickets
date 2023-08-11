@@ -10,11 +10,59 @@
 {% endblock %}
 
 {% block body %}
-<div class="container">
+<div class="event-header">
   <div class="heading">
     <h1>{{ event.name }}</h1>
     <h4>{{ event.tagline }}</h4>
+    <div class="tickets">
+      <button id="tickets">
+        <a href="{{ url_for('tickets', event_id=event.id) }}">
+          <img src="{{ url_for('static', filename='Images/tickets.png') }}" alt="Edit Event">
+          Get Tickets
+        </a>
+      </button>
+      {% if current_user.role == 1 and event.user == current_user.id %}
+      <a id="ticket" href="{{ url_for('edit_event', event_id=event.unique_id) }}">
+        <img src="{{ url_for('static', filename='Images/editing.png') }}" alt="Edit Event">
+      </a>
+      <a id="ticket" href="{{ url_for('delete_event', event_id=event.unique_id) }}">
+        <img src="{{ url_for('static', filename='Images/delete.png') }}" alt="Delete Event">
+      </a>
+      {% endif %}
+    </div>
   </div>
+</div>
+<div class="event-info">
+  <div class="date-info">
+    <div id="start">
+      <h4>Start Date</h4>
+      <p>
+        {{ event.start_date.strftime("%d/%m/%Y")}} -
+        <span>{{ event.start_time.strftime("%I:%M %p") }}</span>
+      </p>
+    </div>
+    <div id="end">
+      <h4>End Date</h4>
+      <p>
+        {{ event.end_date.strftime("%d/%m/%Y")}} -
+        <span>{{ event.end_time.strftime("%I:%M %p") }}</span>
+      </p>
+    </div>
+    <div id="location">
+      <h4>Location</h4>
+      <p>{{ event.location }}</p>
+    </div>
+    <div id="ticket">
+      <h4>Available Tickets</h4>
+      <p>{{ "{:,}".format(event.tickets) }} tickets remaining</p>
+    </div>
+  </div>
+  {% if event.description %}
+  <div class="event-desc">
+    <h4>Event Description</h4>
+    <p>{{ event.description }}</p>
+  </div>
+  {% endif %}
 </div>
 
 <script src="{{ url_for('static', filename='js/auth.js') }}"></script>

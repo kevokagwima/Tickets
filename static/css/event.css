@@ -1,20 +1,20 @@
 body {
-  background-color: var(--main-bgcolor);
+  background-color: var(--sec-bgcolor);
 }
 
-.container {
-  min-height: 15rem;
-  max-height: 15rem;
+.event-header {
+  min-height: 20rem;
+  max-height: 20rem;
   background-image: url(../images/banner.png);
   background-repeat: no-repeat;
   background-size: cover;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .heading {
   padding: 2rem;
-  flex-grow: 1;
   text-align: center;
 }
 
@@ -27,4 +27,89 @@ body {
 .heading h4 {
   font-family: var(--paragraph-font);
   color: var(--sec-bgcolor);
+}
+
+.tickets {
+  margin: 2rem 0;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  align-items: center;
+}
+
+#tickets {
+  background-color: var(--main-bgcolor);
+  border: none;
+  padding: 0.3em 1em;
+  border-radius: 30rem;
+}
+
+#tickets a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--paragraph-font);
+  color: var(--highlight-bgcolor);
+  font-size: 2ch;
+}
+
+.tickets img {
+  max-height: 2rem;
+}
+
+.event-info {
+  padding: 0 2rem;
+  display: grid;
+  row-gap: 2rem;
+}
+
+.date-info {
+  margin-top: -3.5rem;
+  background-color: var(--main-bgcolor);
+  padding: 1.5rem 1rem;
+  border-radius: 1rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.date-info h4 {
+  font-family: var(--header-font);
+  font-size: 3ch;
+}
+
+.date-info p {
+  font-family: var(--paragraph-font);
+  font-size: 2.2ch;
+  margin: 0.5rem 0 0.3rem;
+}
+
+.date-info span {
+  font-family: var(--links-font);
+}
+
+.event-desc {
+  display: grid;
+  row-gap: 1rem;
+  padding: 0 6.6rem;
+}
+
+.event-desc h4 {
+  font-family: var(--header-font);
+  font-size: 3ch;
+}
+
+.event-desc p {
+  font-family: var(--paragraph-font);
+  font-size: 2.2ch;
+}
+
+@media screen and (max-width: 400px) {
+  .heading h1 {
+    font-size: 5ch;
+  }
+
+  .heading h4 {
+    font-size: 2ch;
+  }
 }

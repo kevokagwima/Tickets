@@ -187,11 +187,10 @@ header {
   left: 0;
   right: 0;
   z-index: 10;
-  min-width: 60rem;
-  max-width: 60rem;
-  margin: 0 auto;
-  padding: 2px 0 0;
-  display: grid;
+  min-width: 100vw;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
   gap: 0.2rem;
   animation: fade-away 1s 6s forwards;
 }
@@ -204,7 +203,7 @@ header {
 
   to {
     transform: translateY(-2rem);
-    opacity: 0;
+    opacity: 1;
     visibility: hidden;
   }
 }
@@ -241,4 +240,15 @@ header {
   color: #a94442;
   background-color: #f2dede;
   border-color: #ebccd1;
+}
+
+@media screen and (max-width: 400px) {
+  header {
+    padding-inline: 0.5rem;
+  }
+
+  .tops {
+    min-width: 20vw;
+    max-width: 98vw;
+  }
 }

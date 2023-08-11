@@ -4,8 +4,7 @@
 }
 
 .events {
-  margin-top: 1rem;
-  padding: 0 2rem;
+  padding: 1rem 2rem 0;
   position: relative;
 }
 
@@ -62,7 +61,7 @@
 
 .all-events {
   margin-top: 1rem;
-  max-height: 40rem;
+  max-height: 78.8vh;
   overflow: hidden;
   padding: 0.3rem;
 }
@@ -81,7 +80,7 @@
 }
 
 .event {
-  border-radius: 0.2rem;
+  border-radius: 1rem;
   background-color: var(--main-bgcolor);
   overflow: hidden;
   display: flex;
@@ -242,4 +241,69 @@
 #ticket img,
 #tickets img {
   max-height: 1.5rem;
+}
+
+@media screen and (max-width: 400px) {
+  .events {
+    padding: 1rem 0.5rem;
+  }
+
+  #header {
+    font-size: 3ch;
+  }
+
+  .events-box {
+    padding-bottom: 5rem;
+    grid-template-columns: 1fr;
+  }
+
+  .event {
+    flex-direction: column;
+  }
+
+  .image-box {
+    min-width: 100%;
+  }
+
+  .image-box img {
+    height: 3rem;
+    width: 100%;
+  }
+
+  .event-header {
+    flex-direction: column;
+    align-items: start;
+    gap: 0.3rem;
+  }
+
+  .event-header h1 {
+    font-size: 3ch;
+  }
+
+  .ongoing {
+    font-size: 1.8ch;
+  }
+
+  .event-loc {
+    font-size: 2ch;
+  }
+
+  .event-dates p {
+    display: grid;
+  }
+
+  .tickets-box {
+    flex-direction: column;
+    align-items: start;
+    gap: 1rem;
+  }
+
+  .tickets {
+    gap: 0;
+    width: 100%;
+  }
+
+  #ticket {
+    margin-left: 2rem;
+  }
 }
