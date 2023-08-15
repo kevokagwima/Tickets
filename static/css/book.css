@@ -19,7 +19,7 @@ a {
   background-color: var(--main-bgcolor);
   margin: 2rem auto 0;
   max-width: 34rem;
-  min-width: 34rem;
+  min-width: max-content;
   box-shadow: 0 0 10px -8px rgba(0, 0, 0, 0.426);
   text-align: center;
 }
@@ -102,7 +102,7 @@ form button {
 
   form {
     grid-template-columns: 1fr;
-    min-width: 60vw;
+    min-width: 100%;
   }
 
   form button,
@@ -124,15 +124,7 @@ form button {
 
 @media screen and (max-width: 400px) {
   .form > h1 {
-    font-size: 3ch;
+    font-size: 4ch;
     margin: 2rem auto 0;
-  }
-
-  form {
-    padding: 1rem;
-  }
-
-  input {
-    width: 100%;
   }
 }

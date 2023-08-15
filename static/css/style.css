@@ -243,13 +243,13 @@
   max-height: 1.5rem;
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 600px) {
   .events {
     padding: 1rem 0.5rem;
   }
 
   #header {
-    font-size: 3ch;
+    font-size: 5ch;
   }
 
   .events-box {
@@ -266,7 +266,7 @@
   }
 
   .image-box img {
-    height: 3rem;
+    height: 4rem;
     width: 100%;
   }
 
@@ -274,6 +274,51 @@
     flex-direction: column;
     align-items: start;
     gap: 0.3rem;
+  }
+
+  .event-header h1 {
+    font-size: 4ch;
+  }
+
+  .ongoing {
+    font-size: 1.8ch;
+  }
+
+  .event-loc {
+    font-size: 2.4ch;
+  }
+
+  .event-dates p {
+    display: grid;
+    font-size: 2.2ch;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  #header {
+    font-size: 4ch;
+  }
+
+  .event-header h1 {
+    font-size: 3.5ch;
+  }
+
+  .ongoing {
+    font-size: 1.8ch;
+  }
+
+  .event-loc {
+    font-size: 2.4ch;
+  }
+
+  .event-dates p {
+    font-size: 2.2ch;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  #header {
+    font-size: 3ch;
   }
 
   .event-header h1 {
@@ -289,7 +334,7 @@
   }
 
   .event-dates p {
-    display: grid;
+    font-size: 2ch;
   }
 
   .tickets-box {
