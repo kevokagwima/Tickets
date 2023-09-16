@@ -2,7 +2,7 @@
 
 {% block head %}
 {{ super() }}
-<link rel="stylesheet" href="../static/css/event.css">
+<link rel="stylesheet" href="../static/css/create_event.css">
 {% endblock %}
 
 {% block title %}
@@ -12,47 +12,47 @@ Edit Event {{ event.name }}
 {% block body %}
 <div class="event-registration">
   <h1>Tell us about your event</h1>
-  <form method="post">
-    {{ form.csrf_token }}
+  <form action="{{ url_for('edit_event', event_id=event.unique_id) }}" method="POST">
     <div class="input extend">
-      {{ form.name.label }}
-      {{ form.name(placeholder="Name of the event", value=event.name) }}
-    </div>
-    <div class="input extend">
-      {{ form.tagline.label }}
-      {{ form.tagline(placeholder="Tagline of the event", value=event.tagline) }}
+      <label for="">Event Name</label>
+      <input type="text" name="name" placeholder="Name of the event" value="{{ event.name }}">
     </div>
     <div class="input extend">
-      {{ form.description.label }}
-      {{ form.description(placeholder="Max limit of 1000 characters") }}
-    </div>
-    <div class="input">
-      {{ form.start_date.label }}
-      {{ form.start_date(value=event.start_date) }}
-    </div>
-    <div class="input">
-      {{ form.end_date.label }}
-      {{ form.end_date(value=event.end_date) }}
-    </div>
-    <div class="input">
-      {{ form.start_time.label }}
-      {{ form.start_time(value=event.start_time) }}
-    </div>
-    <div class="input">
-      {{ form.end_time.label }}
-      {{ form.end_time(value=event.end_time) }}
+      <label for="">Event Tagline</label>
+      <input type="text" name="tagline" placeholder="Tagline of the event" value="{{ event.tagline }}">
     </div>
     <div class="input extend">
-      {{ form.location.label }}
-      {{ form.location(placeholder="Event Venue", value=event.location) }}
+      <label for="">Event Description</label>
+      <textarea type="text" name="description" placeholder="Description of the event (max characters 1000)">{{
+        event.description }}</textarea>
     </div>
     <div class="input">
-      {{ form.price.label }}
-      {{ form.price(placeholder="Ticket Price", value=event.price) }}
+      <label for="">Start Date</label>
+      <input type="date" name="start_date" value="{{ event.start_date }}">
     </div>
     <div class="input">
-      {{ form.no_of_tickets.label }}
-      {{ form.no_of_tickets(placeholder="No of available tickets", value=event.tickets) }}
+      <label for="">End Date</label>
+      <input type="date" name="end_date" value="{{ event.end_date }}">
+    </div>
+    <div class="input">
+      <label for="">Start Time</label>
+      <input type="time" name="start_time" value="{{ event.start_time }}">
+    </div>
+    <div class="input">
+      <label for="">End Time</label>
+      <input type="time" name="end_time" value="{{ event.end_time }}">
+    </div>
+    <div class="input extend">
+      <label for="">Event Location</label>
+      <input type="text" name="location" placeholder="Location of the event" value="{{ event.location }}">
+    </div>
+    <div class="input">
+      <label for="">Ticket Price</label>
+      <input type="number" name="price" placeholder="Ticket Price" value="{{ event.price }}">
+    </div>
+    <div class="input">
+      <label for="">Available Tickets</label>
+      <input type="number" name="tickets" placeholder="No of tickets" value="{{ event.tickets }}">
     </div>
     <button class="btn extend" type="submit">
       <span class="button--text">Update Event</span>

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, redirect, url_for, request
+from flask import Flask, render_template, flash, redirect, url_for, request, session
 from flask_login import login_manager, LoginManager, login_user, logout_user, current_user, login_required
 from models import * 
 from form import *
@@ -173,38 +173,28 @@ def event_details(event_id):
 @app.route("/edit-event/<int:event_id>", methods=["POST", "GET"])
 @login_required
 def edit_event(event_id):
-  form = EditEventForm()
   roles = Role.query.all()
-  # try:
   event = Event.query.filter_by(unique_id=event_id).first()
-  if form.validate_on_submit():
-    todays_date = date.today()
-    start_date = form.start_date.data
-    end_date = form.end_date.data
-    if str(start_date) < str(event.start_date):
-      flash("Start date cannot be before current date", category="danger")
-      return redirect(url_for('edit_event', event_id=event.id))
-    elif end_date < start_date:
-      flash("End Date cannot be before start date", category="danger")
-      return redirect(url_for('edit_event', event_id=event.id))
-    else:
-      event.name = form.name.data,
-      event.tagline = form.tagline.data,
-      event.start_date = form.start_date.data,
-      event.end_date = form.end_date.data,
-      event.start_time = form.start_time.data,
-      event.end_time = form.end_time.data,
-      event.price = form.price.data,
-      event.location = form.location.data,
-      event.tickets = form.no_of_tickets.data,
-      event.user = current_user.id
-      db.session.commit()
-      flash(f"Event '{event.name}' updated successfully", category="success")
-      return redirect(url_for('home'))
-  return render_template("edit_event.html", roles=roles, form=form, event=event)
-  # except:
-  #   flash("Event not found", category="danger")
-  # return redirect(url_for('home'))
+  if request.method == "POST":
+    today_date = date.today()
+    if request.form.get("start_date") != event.start_date:
+      if request.form.get("start_date") < str(today_date) or request.form.get("end_date") < str(today_date):
+        flash("The start or end date cannot be earlier than the today", category="danger")
+        return redirect(url_for('edit_event', event_id=event.unique_id))
+    event.name = request.form.get("name")
+    event.tagline = request.form.get("tagline")
+    event.description = request.form.get("description")
+    event.start_date = request.form.get("start_date")
+    event.end_date = request.form.get("end_date")
+    event.start_time = request.form.get("start_time")
+    event.end_time = request.form.get("end_time")
+    event.location = request.form.get("location")
+    event.price = request.form.get("price")
+    event.tickets = request.form.get("tickets")
+    db.session.commit()
+    flash(f"Event {event.name} updated successfully", category="success")
+    return redirect(url_for('home'))
+  return render_template("edit_event.html", roles=roles, event=event)
 
 @app.route("/delete-event/<int:event_id>")
 @login_required
