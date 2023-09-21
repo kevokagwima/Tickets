@@ -228,6 +228,11 @@
   cursor: pointer;
 }
 
+#tickets:disabled {
+  background-color: rgb(206, 206, 206);
+  color: grey;
+}
+
 #tickets a {
   display: flex;
   align-items: center;

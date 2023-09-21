@@ -3,7 +3,7 @@ from flask_login import login_manager, LoginManager, login_user, logout_user, cu
 from models import * 
 from form import *
 from datetime import datetime, date
-import qrcode, os, shutil
+import qrcode, os, shutil, stripe
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "fvjdnjkdsnsnd"
@@ -11,6 +11,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "mssql+pyodbc://KEVINKAGWIMA/tickets?dri
 # app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://kevokagwima:Hunter1234@kevokagwima.mysql.pythonanywhere-services.com/kevokagwima$tickets"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
+stripe.api_key = os.environ['Stripe_api_key']
 UPLOAD_FOLDER = 'static/images/Qr_codes'
 UPLOAD_FOLDER = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
@@ -38,7 +39,9 @@ def event_expiry():
     current_time = datetime.now()
     if event.end_date < today or (event.end_date == today and event.end_time.strftime("%H:%M") < current_time.strftime("%H:%M")):
       event.status = "Ended"
-      db.session.commit()
+    if event.tickets <= 0:
+      event.status = "Sold Out"
+    db.session.commit()
   return None
 
 @app.route("/register", methods=["POST", "GET"])
@@ -177,15 +180,18 @@ def edit_event(event_id):
   event = Event.query.filter_by(unique_id=event_id).first()
   if request.method == "POST":
     today_date = date.today()
-    if request.form.get("start_date") != event.start_date:
-      if request.form.get("start_date") < str(today_date) or request.form.get("end_date") < str(today_date):
-        flash("The start or end date cannot be earlier than the today", category="danger")
+    if request.form.get("start_date") != str(event.start_date) or request.form.get("start_date") > str(event.start_date) or request.form.get("end_date") < str(today_date) or request.form.get("end_date") < str(event.start_date):
+      if request.form.get("start_date") < str(today_date) or request.form.get("end_date") < str(today_date) or request.form.get("end_date") < str(event.start_date):
+        flash("Invalid date", category="danger")
         return redirect(url_for('edit_event', event_id=event.unique_id))
     event.name = request.form.get("name")
     event.tagline = request.form.get("tagline")
     event.description = request.form.get("description")
     event.start_date = request.form.get("start_date")
-    event.end_date = request.form.get("end_date")
+    if request.form.get("start_date") > request.form.get("end_date"):
+      event.end_date = request.form.get("start_date")
+    else:
+      event.end_date = request.form.get("end_date")
     event.start_time = request.form.get("start_time")
     event.end_time = request.form.get("end_time")
     event.location = request.form.get("location")
@@ -193,7 +199,7 @@ def edit_event(event_id):
     event.tickets = request.form.get("tickets")
     db.session.commit()
     flash(f"Event {event.name} updated successfully", category="success")
-    return redirect(url_for('home'))
+    return redirect(url_for('edit_event', event_id=event.unique_id))
   return render_template("edit_event.html", roles=roles, event=event)
 
 @app.route("/delete-event/<int:event_id>")
@@ -217,6 +223,9 @@ def tickets(event_id):
   roles = Role.query.all()
   if event:
     if request.method == "POST":
+      if int(request.form.get("tickets")) > event.tickets:
+        flash(f"Only {event.tickets} tickets are available", category="info")
+        return redirect(url_for('tickets', event_id=event.id))
       if current_user.is_authenticated:
         new_booking = Bookings(
           user = current_user.id,
@@ -226,8 +235,7 @@ def tickets(event_id):
         db.session.add(new_booking)
         event.tickets = event.tickets - int(new_booking.tickets)
         db.session.commit()
-        flash("Your tickets are ready", category="success")
-        return redirect(url_for('home'))
+        return redirect(url_for('payment', booking_id=new_booking.id))
       else:
         new_user = Users(
           first_name = request.form.get("fname"),
@@ -251,6 +259,57 @@ def tickets(event_id):
     flash("Event could not be found", category="danger")
     return redirect(url_for('home'))
   return render_template("book.html", event=event, roles=roles)
+
+@app.route("/payment/<int:booking_id>")
+def payment(booking_id):
+  booking = Bookings.query.get(booking_id)
+  event = Event.query.get(booking.event)
+  total = event.price * booking.tickets
+  try:
+    checkout_session = stripe.checkout.Session.create(
+      line_items = [
+        {
+          'price_data': {
+            'currency': 'KES',
+            'product_data': {
+              'name': f"{event.name}'s tickets",
+            },
+            'unit_amount': (total*100),
+          },
+          'quantity': 1,
+        }
+      ],
+      payment_method_types=["card"],
+      mode='payment',
+      success_url=request.host_url + f'payment-complete/{booking.id}',
+      cancel_url=request.host_url + f'payment-failed/{booking.id}',
+    )
+    return redirect(checkout_session.url)
+  
+  except:
+    event.tickets = event.tickets + booking.tickets
+    db.session.delete(booking)
+    db.session.commit()
+    flash(f"Failed to initialize connection to the stripe server", category="warning")
+    return redirect(url_for('home'))
+
+@app.route("/payment-complete/<int:booking_id>")
+def payment_complete(booking_id):
+  booking = Bookings.query.get(booking_id)
+  booking.status = "Complete"
+  db.session.commit()
+  flash("Payment successfull, your tickets are ready", category="success")
+  return redirect(url_for('home'))
+
+@app.route("/payment-failed/<int:booking_id>")
+def payment_failed(booking_id):
+  booking = Bookings.query.get(booking_id)
+  event = Event.query.get(booking.event)
+  event.tickets = event.tickets + booking.tickets
+  db.session.delete(booking)
+  db.session.commit()
+  flash("Payment failed", category="danger")
+  return redirect(url_for('home'))
 
 @app.route("/logout")
 @login_required

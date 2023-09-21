@@ -48,7 +48,11 @@
   <div class="more-people">
     <p>+ Add person</p>
   </div> -->
-    <button id="submit" type="submit">Book</button>
+    <button class="btn extend" type="submit">
+      <span class="button--text">Book</span>
+    </button>
   </form>
 </div>
+
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
 {% endblock %}
