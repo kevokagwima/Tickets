@@ -13,20 +13,20 @@ Login
 {% block body %}
 <div class="form">
   <h4>Sign In</h4>
-  <form method="post">
+  <form id="form" method="post">
     {{ form.csrf_token }}
     <div class="input">
       {{ form.email_address.label }}
-      {{ form.email_address(placeholder="Enter Email Address") }}
+      {{ form.email_address(placeholder="Enter Email Address", class="name") }}
     </div>
     <div class="input">
       {{ form.password.label }}
-      {{ form.password(placeholder="Enter Password") }}
+      {{ form.password(placeholder="Enter Password", class="name") }}
     </div>
     <button class="btn" type="submit">
       <span class="button--text">SIGN IN</span>
     </button>
-    <span id="info">Don't have an account? <a href="{{ url_for('register') }}">Sign Up</a> here</span>
+    <span id="info">Don't have an account? <a href="{{ url_for('users.register') }}">Sign Up</a></span>
   </form>
 </div>
 

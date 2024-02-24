@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/errors.css') }}">
+{% endblock %}
+
+{% block title %}
+Forbidden Access (403)
+{% endblock %}
+
+{% block body %}
+<main>
+  <h1>Error! Forbidden Access (403)</h1>
+  <p>Please check your account and try again</p>
+</main>
+{% endblock %}

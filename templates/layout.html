@@ -15,18 +15,14 @@
 
 <body>
   <header>
-    <a href="{{ url_for('home') }}">
+    <a href="{{ url_for('users.home') }}">
       <img id="logo" src="../static/images/Screenshot.png" alt="sofafrica.com logo">
     </a>
     <div class="links-box">
       {% if current_user.is_authenticated %}
       <div class="account">
         <div class="account-info">
-          <p>
-            {% for role in roles if role.id == current_user.role %}
-            {{ role.role_name }}
-            {% endfor %}
-          </p>
+          <p>{{ current_user.user_role.role_name }}</p>
           <img src="../static/images/profile.png" alt="user-profile">
         </div>
         <div class="bookings">
@@ -34,7 +30,7 @@
             <a href="#">
               <p>Profile</p>
             </a>
-            <a href="#">
+            <a href="{{ url_for('users.orders') }}">
               <p> My Tickects</p>
             </a>
             {% if current_user.role == 1 %}
@@ -42,7 +38,7 @@
               <p> My Events</p>
             </a>
             {% endif %}
-            <a href="{{ url_for('logout') }}">
+            <a href="{{ url_for('auth.logout') }}">
               <p id="logout">Logout</p>
             </a>
           </div>
@@ -50,8 +46,8 @@
       </div>
       {% else %}
       <div class="links">
-        <a id="link" href="{{ url_for('register') }}">Sign Up</a>
-        <a id="link" href="{{ url_for('login') }}">Sign In</a>
+        <a id="link" href="{{ url_for('auth.register') }}">Sign Up</a>
+        <a id="link" href="{{ url_for('auth.login') }}">Sign In</a>
       </div>
       {% endif %}
     </div>

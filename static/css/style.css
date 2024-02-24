@@ -1,10 +1,5 @@
-::-webkit-scrollbar {
-  background-color: var(--sec-bgcolor);
-  max-width: 0.3rem;
-}
-
 .events {
-  padding: 1rem 2rem 0;
+  padding: 1rem 2rem;
   position: relative;
 }
 
@@ -39,10 +34,10 @@
 }
 
 #header {
-  font-family: var(--header-font);
   display: flex;
   align-items: center;
   gap: 1rem;
+  font-size: 3ch;
 }
 
 #event-link {
@@ -50,18 +45,17 @@
   background-color: var(--highlight-bgcolor);
   border-radius: 30rem;
   color: var(--main-bgcolor);
-  font-family: var(--paragraph-font);
   font-size: 1.5ch;
+  font-family: var(--paragraph-font);
 }
 
 #no-events {
-  font-family: var(--paragraph-font);
   color: red;
 }
 
 .all-events {
   margin-top: 1rem;
-  max-height: 78.8vh;
+  max-height: 78.8svh;
   overflow: hidden;
   padding: 0.3rem;
 }
@@ -69,13 +63,12 @@
 .events-box {
   margin-top: 1rem;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   align-items: center;
   gap: 2rem;
   min-height: max-content;
-  max-height: 40rem;
   padding-right: 0.3rem;
-  padding-bottom: 3rem;
+  padding-bottom: 1rem;
   overflow: scroll;
 }
 
@@ -88,13 +81,14 @@
 
 .image-box {
   max-height: 100%;
-  max-width: 20rem;
+  max-width: 2rem;
+  min-width: 2rem;
   overflow: hidden;
 }
 
 .image-box img {
+  width: 100%;
   height: 100%;
-  width: 20rem;
   object-fit: cover;
   object-position: center;
 }
@@ -111,17 +105,14 @@
 }
 
 .event-header h1 {
-  font-family: var(--header-font);
-  font-size: 4ch;
-  max-width: 20rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: 3ch;
   color: #212121;
 }
 
 .ongoing {
   color: green;
-  font-family: var(--header-font);
+  font-size: 1.5ch;
+  font-weight: bold;
 }
 
 #ongoing {
@@ -152,22 +143,17 @@
 }
 
 .event-loc {
-  font-family: var(--header-font);
-  font-size: 2.2ch;
-  margin: 1rem 0;
+  font-size: 1.8ch;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.5rem;
   color: var(--highlight-bgcolor);
-  display: grid;
-  gap: 0.5rem;
 }
 
-.event-loc > span {
+.event-loc span {
   font-size: 1ch;
-  font-family: var(--paragraph-font);
-  background-color: green;
-  color: var(--sec-bgcolor);
-  padding: 0.2rem 0.6rem;
-  border-radius: 30rem;
-  max-width: max-content;
+  color: green;
 }
 
 .event-info hr {
@@ -177,12 +163,12 @@
 }
 
 .event-dates {
+  margin-top: 1rem;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.6rem;
   align-items: center;
-  font-family: var(--links-font);
-  font-size: 1.8ch;
+  font-size: 1.5ch;
   color: #212121;
 }
 
@@ -198,34 +184,31 @@
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  background-color: greenyellow;
-  padding: 0 0.8rem;
   max-width: max-content;
   border-radius: 30rem;
-  color: #212121;
 }
 
 .tickets-price img {
   max-height: 2rem;
 }
 
-.tickets-price h4 {
-  font-size: 2ch;
-  font-family: var(--links-font);
-}
-
-.tickets {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+.tickets-price > h4 {
+  font-size: 1.8ch;
+  font-family: var(--paragraph-font);
+  color: var(--highlight-bgcolor);
 }
 
 #tickets {
-  padding: 0.4rem 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 1rem;
   border-radius: 30rem;
-  border: none;
-  background-color: var(--highlight-bgcolor);
   cursor: pointer;
+  font-size: 1.8ch;
+  background-color: var(--highlight-bgcolor);
+  color: var(--main-bgcolor);
+  font-family: var(--paragraph-font);
 }
 
 #tickets:disabled {
@@ -233,127 +216,102 @@
   color: grey;
 }
 
-#tickets a {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-family: var(--paragraph-font);
-  color: var(--main-bgcolor);
-  color: white;
-  font-size: 2ch;
-}
-
 #ticket img,
 #tickets img {
   max-height: 1.5rem;
 }
 
-@media screen and (max-width: 600px) {
-  .events {
-    padding: 1rem 0.5rem;
-  }
-
-  #header {
-    font-size: 5ch;
-  }
-
+@media screen and (max-width: 1300px) {
   .events-box {
-    padding-bottom: 5rem;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
   }
 
-  .event {
-    flex-direction: column;
-  }
-
-  .image-box {
-    min-width: 100%;
-  }
-
-  .image-box img {
-    height: 4rem;
-    width: 100%;
-  }
-
-  .event-header {
-    flex-direction: column;
-    align-items: start;
-    gap: 0.3rem;
-  }
-
-  .event-header h1 {
-    font-size: 4ch;
-  }
-
-  .ongoing {
-    font-size: 1.8ch;
+  .event-header > h1 {
+    font-size: 2ch;
   }
 
   .event-loc {
-    font-size: 2.4ch;
+    font-size: 1.5ch;
+  }
+
+  .event-dates {
+    font-size: 1.5ch;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .event-dates p {
+    display: grid;
+  }
+
+  .event-header,
+  .event-loc {
+    flex-direction: column;
+    align-items: baseline;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .tickets-box {
+    flex-direction: column;
+    align-items: baseline;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .events {
+    padding-inline: 1rem;
+  }
+
+  .all-events {
+    padding: 0;
+  }
+
+  .events-box {
+    grid-template-columns: 1fr;
+  }
+
+  .event-header,
+  .event-loc,
+  .tickets-box {
+    flex-direction: row;
+    align-items: center;
   }
 
   .event-dates p {
-    display: grid;
-    font-size: 2.2ch;
+    display: block;
   }
 }
 
 @media screen and (max-width: 500px) {
-  #header {
-    font-size: 4ch;
-  }
-
-  .event-header h1 {
-    font-size: 3.5ch;
-  }
-
-  .ongoing {
-    font-size: 1.8ch;
-  }
-
+  .event-header,
   .event-loc {
-    font-size: 2.4ch;
+    flex-direction: column;
+    align-items: baseline;
   }
 
   .event-dates p {
-    font-size: 2.2ch;
+    display: grid;
   }
 }
 
 @media screen and (max-width: 400px) {
-  #header {
-    font-size: 3ch;
+  .image-box {
+    max-width: 1rem;
+    min-width: 1rem;
   }
 
-  .event-header h1 {
-    font-size: 3ch;
-  }
-
-  .ongoing {
-    font-size: 1.8ch;
+  .event-header > h1 {
+    font-size: 2.5ch;
   }
 
   .event-loc {
-    font-size: 2ch;
-  }
-
-  .event-dates p {
-    font-size: 2ch;
+    font-size: 1.5ch;
   }
 
   .tickets-box {
     flex-direction: column;
-    align-items: start;
-    gap: 1rem;
-  }
-
-  .tickets {
-    gap: 0;
-    width: 100%;
-  }
-
-  #ticket {
-    margin-left: 2rem;
+    align-items: baseline;
   }
 }

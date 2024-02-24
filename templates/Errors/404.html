@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/errors.css') }}">
+{% endblock %}
+
+{% block title %}
+Page Not Found (404)
+{% endblock %}
+
+{% block body %}
+<main>
+  <h1>Oops. Page not found (404)</h1>
+  <p>That page does not exist</p>
+</main>
+{% endblock %}

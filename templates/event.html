@@ -18,17 +18,17 @@
       {% if event.tickets <= 0 %} <button id="tickets" disabled>Sold out</button>
         {% else %}
         <button id="tickets">
-          <a href="{{ url_for('tickets', event_id=event.id) }}">
+          <a href="{{ url_for('users.tickets', event_id=event.id) }}">
             <img src="{{ url_for('static', filename='Images/tickets.png') }}" alt="Edit Event">
             Get Tickets
           </a>
         </button>
         {% endif %}
         {% if current_user.role == 1 and event.user == current_user.id %}
-        <a id="ticket" href="{{ url_for('edit_event', event_id=event.unique_id) }}">
+        <a id="ticket" href="{{ url_for('admin.edit_event', event_id=event.unique_id) }}">
           <img src="{{ url_for('static', filename='Images/editing.png') }}" alt="Edit Event">
         </a>
-        <a id="ticket" href="{{ url_for('delete_event', event_id=event.unique_id) }}">
+        <a id="ticket" href="{{ url_for('admin.delete_event', event_id=event.unique_id) }}">
           <img src="{{ url_for('static', filename='Images/delete.png') }}" alt="Delete Event">
         </a>
         {% endif %}

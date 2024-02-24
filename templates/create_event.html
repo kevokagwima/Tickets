@@ -16,43 +16,43 @@ Create Event
     {{ form.csrf_token }}
     <div class="input extend">
       {{ form.name.label }}
-      {{ form.name(placeholder="Name of the event") }}
+      {{ form.name(placeholder="Name of the event", class="name") }}
     </div>
     <div class="input extend">
       {{ form.tagline.label }}
-      {{ form.tagline(placeholder="Tagline of the event") }}
+      {{ form.tagline(placeholder="Tagline of the event", class="name") }}
     </div>
     <div class="input extend">
       {{ form.description.label }}
-      {{ form.description(placeholder="Max limit of 1000 characters") }}
+      {{ form.description(placeholder="Max limit of 1000 characters", class="name") }}
     </div>
     <div class="input">
       {{ form.start_date.label }}
-      {{ form.start_date }}
+      {{ form.start_date(class="name") }}
     </div>
     <div class="input">
       {{ form.end_date.label }}
-      {{ form.end_date }}
+      {{ form.end_date(class="name") }}
     </div>
     <div class="input">
       {{ form.start_time.label }}
-      {{ form.start_time }}
+      {{ form.start_time(class="name") }}
     </div>
     <div class="input">
       {{ form.end_time.label }}
-      {{ form.end_time }}
+      {{ form.end_time(class="name") }}
     </div>
     <div class="input extend">
       {{ form.location.label }}
-      {{ form.location(placeholder="Event Venue") }}
+      {{ form.location(placeholder="Event Venue", class="name") }}
     </div>
     <div class="input">
       {{ form.price.label }}
-      {{ form.price(placeholder="Ticket Price") }}
+      {{ form.price(placeholder="Ticket Price", class="name") }}
     </div>
     <div class="input">
       {{ form.no_of_tickets.label }}
-      {{ form.no_of_tickets(placeholder="No of available tickets") }}
+      {{ form.no_of_tickets(placeholder="No of available tickets", class="name") }}
     </div>
     <button class="btn extend" type="submit">
       <span class="button--text">Create Event</span>

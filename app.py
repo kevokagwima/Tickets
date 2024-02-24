@@ -1,322 +1,38 @@
-from flask import Flask, render_template, flash, redirect, url_for, request, session
-from flask_login import login_manager, LoginManager, login_user, logout_user, current_user, login_required
-from models import * 
+from flask import Flask, flash
+from flask_login import login_manager, LoginManager
+from flask_migrate import Migrate
+from Users.routes import users
+from Admin.routes import admin
+from Auth.routes import auth
+from Errors.handlers import errors
+from models import *
 from form import *
-from datetime import datetime, date
-import qrcode, os, shutil, stripe
+from config import Config
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "fvjdnjkdsnsnd"
-app.config["SQLALCHEMY_DATABASE_URI"] = "mssql+pyodbc://KEVINKAGWIMA/tickets?driver=ODBC+Driver+11+for+SQL+Server"
-# app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://kevokagwima:Hunter1234@kevokagwima.mysql.pythonanywhere-services.com/kevokagwima$tickets"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config.from_object(Config)
 db.init_app(app)
-stripe.api_key = os.environ['Stripe_api_key']
-UPLOAD_FOLDER = 'static/images/Qr_codes'
-UPLOAD_FOLDER = UPLOAD_FOLDER
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+csrf.init_app(app)
+migrate = Migrate(app, db)
+app.register_blueprint(users)
+app.register_blueprint(admin)
+app.register_blueprint(auth)
+app.register_blueprint(errors)
 login_manager = LoginManager()
-login_manager.login_view = '/login'
+login_manager.blueprint_login_views = {
+  'users': '/signin',
+  'admin': '/signin',
+}
 login_manager.login_message = "Please login to access this page"
 login_manager.login_message_category = "danger"
 login_manager.init_app(app)
-
-if not os.path.exists(UPLOAD_FOLDER):
-  os.makedirs(UPLOAD_FOLDER)
 
 @login_manager.user_loader
 def load_user(user_id):
   try:
     return Users.query.filter_by(unique_id=user_id).first()
   except:
-    flash("Failed to login the user", category="danger")
-
-@app.before_request
-def event_expiry():
-  all_events = Event.query.filter_by(status="Active").all()
-  for event in all_events:
-    today = date.today()
-    current_time = datetime.now()
-    if event.end_date < today or (event.end_date == today and event.end_time.strftime("%H:%M") < current_time.strftime("%H:%M")):
-      event.status = "Ended"
-    if event.tickets <= 0:
-      event.status = "Sold Out"
-    db.session.commit()
-  return None
-
-@app.route("/register", methods=["POST", "GET"])
-def register():
-  form = RegistrationForm()
-  form.account.choices = [(role.id, role.role_name) for role in Role.query.all()]
-  if request.method == "POST":
-    if form.validate_on_submit():
-      new_user = Users(
-        first_name = form.first_name.data,
-        surname = form.surname.data,
-        email = form.email_address.data,
-        phone = form.phone_number.data,
-        passwords = form.password.data,
-        role = form.account.data
-      )
-      db.session.add(new_user)
-      db.session.commit()
-      flash("Registration successfull", category="success")
-      return redirect(url_for('login'))
-    
-    if form.errors != {}:
-      for err_msg in form.errors.values():
-        flash(f"{err_msg}", category="danger")
-
-  return render_template("register.html", form=form)
-
-@app.route("/login", methods=["POST", "GET"])
-def login():
-  form = LoginForm()
-  if request.method == "POST":
-    if form.validate_on_submit():
-      user = Users.query.filter_by(email=form.email_address.data).first()
-      if user and user.check_password_correction(attempted_password=form.password.data):
-        login_user(user, remember=True)
-        flash("Login successfull", category="success")
-        return redirect(url_for("home"))
-      elif user is None:
-        flash("No user with that email", category="danger")
-        return redirect(url_for('login'))
-      else:
-        flash("Invalid credentials", category="danger")
-        return redirect(url_for('login'))
-  return render_template("login.html", form=form)
-
-@app.route("/")
-@app.route("/home")
-@login_required
-def home():
-  events = Event.query.all()
-  roles = Role.query.all()
-  today = date.today()
-  current_time = datetime.now()
-  return render_template("index.html", events=events, roles=roles, today=today, current_time=current_time)
-
-@app.route("/create-event", methods=["POST", "GET"])
-@login_required
-def create_event():
-  form = EventCreationForm()
-  roles = Role.query.all()
-  if form.validate_on_submit():
-    event = Event.query.filter_by(name=form.name.data, status="Active").first()
-    todays_date = date.today()
-    start_date = form.start_date.data
-    end_date = form.end_date.data
-    if str(start_date) < str(todays_date):
-      flash("Start date cannot be before current date", category="danger")
-      return redirect(url_for('create_event'))
-    elif event:
-      flash("An event with that name already exists and it's ongoing", category="danger")
-      return redirect(url_for('create_event'))
-    elif end_date < start_date:
-      flash("End Date cannot be before start date", category="danger")
-      return redirect(url_for('create_event'))
-    else:
-      new_event = Event(
-        name = form.name.data,
-        tagline = form.tagline.data,
-        description = form.description.data,
-        start_date = start_date,
-        end_date = end_date,
-        start_time = form.start_time.data,
-        end_time = form.end_time.data,
-        price = form.price.data,
-        location = form.location.data,
-        tickets = form.no_of_tickets.data,
-        user = current_user.id
-      )
-      db.session.add(new_event)
-      db.session.commit()
-      generate_qrcode(new_event.id, new_event.tickets)
-      flash(f"Event '{new_event.name}' created successfully", category="success")
-      return redirect(url_for('home'))
-  return render_template("create_event.html", roles=roles, form=form)
-
-def allowed_file(filename):
-  return '.' in filename and \
-    filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-def generate_qrcode(event_id, tickets):
-  event = Event.query.get(event_id)
-  for i in range(tickets):
-    new_qrcode = Qrcodes(
-      event = event_id,
-      unique_id = random.randint(100000000,999999999)
-    )
-    db.session.add(new_qrcode)
-    qrcode_name = f'{event.name}-{new_qrcode.unique_id}'
-    new_qrcode.qrcode = qrcode_name
-    db.session.commit()
-    qr = qrcode.QRCode(version=1, box_size=10, border=4)
-    qr.make(fit=True)
-    qr.add_data(qrcode_name)
-    folder = f"{event.name}"
-    if not os.path.exists(folder):
-      os.makedirs(folder)
-    filename = os.path.join(folder, f'{qrcode_name}.png')
-    img = qr.make_image(fill_color='black', back_color='white')
-    img.save(filename)
-  shutil.move(folder, UPLOAD_FOLDER)
-
-@app.route("/event-details/<int:event_id>")
-def event_details(event_id):
-  roles = Role.query.all()
-  try:
-    event = Event.query.get(event_id)
-    return render_template("event.html", event=event, roles=roles)
-  except:
-    flash("Event not found", category="danger")
-    return redirect(url_for('home'))
-
-@app.route("/edit-event/<int:event_id>", methods=["POST", "GET"])
-@login_required
-def edit_event(event_id):
-  roles = Role.query.all()
-  event = Event.query.filter_by(unique_id=event_id).first()
-  if request.method == "POST":
-    today_date = date.today()
-    if request.form.get("start_date") != str(event.start_date) or request.form.get("start_date") > str(event.start_date) or request.form.get("end_date") < str(today_date) or request.form.get("end_date") < str(event.start_date):
-      if request.form.get("start_date") < str(today_date) or request.form.get("end_date") < str(today_date) or request.form.get("end_date") < str(event.start_date):
-        flash("Invalid date", category="danger")
-        return redirect(url_for('edit_event', event_id=event.unique_id))
-    event.name = request.form.get("name")
-    event.tagline = request.form.get("tagline")
-    event.description = request.form.get("description")
-    event.start_date = request.form.get("start_date")
-    if request.form.get("start_date") > request.form.get("end_date"):
-      event.end_date = request.form.get("start_date")
-    else:
-      event.end_date = request.form.get("end_date")
-    event.start_time = request.form.get("start_time")
-    event.end_time = request.form.get("end_time")
-    event.location = request.form.get("location")
-    event.price = request.form.get("price")
-    event.tickets = request.form.get("tickets")
-    db.session.commit()
-    flash(f"Event {event.name} updated successfully", category="success")
-    return redirect(url_for('edit_event', event_id=event.unique_id))
-  return render_template("edit_event.html", roles=roles, event=event)
-
-@app.route("/delete-event/<int:event_id>")
-@login_required
-def delete_event(event_id):
-  try:
-    event = Event.query.filter_by(unique_id=event_id).first()
-    qrcodes = Qrcodes.query.filter_by(event=event.id).all()
-    for qrcode in qrcodes:
-      db.session.delete(qrcode)
-    db.session.delete(event)
-    db.session.commit()
-    flash(f"Event {event.name} has been removed successfully", category="success")
-  except:
-    flash("An error occured", category="danger")
-  return redirect(url_for('home'))
-
-@app.route("/tickets/<int:event_id>", methods=["POST", "GET"])
-def tickets(event_id):
-  event = Event.query.get(event_id)
-  roles = Role.query.all()
-  if event:
-    if request.method == "POST":
-      if int(request.form.get("tickets")) > event.tickets:
-        flash(f"Only {event.tickets} tickets are available", category="info")
-        return redirect(url_for('tickets', event_id=event.id))
-      if current_user.is_authenticated:
-        new_booking = Bookings(
-          user = current_user.id,
-          event = event.id,
-          tickets = request.form.get("tickets")
-        )
-        db.session.add(new_booking)
-        event.tickets = event.tickets - int(new_booking.tickets)
-        db.session.commit()
-        return redirect(url_for('payment', booking_id=new_booking.id))
-      else:
-        new_user = Users(
-          first_name = request.form.get("fname"),
-          surname = request.form.get("sname"),
-          email = request.form.get("email"),
-          phone = request.form.get("phone"),
-        )
-        db.session.add(new_user)
-        db.session.commit()
-        new_booking = Bookings(
-          user = new_user.id,
-          event = event.id,
-          tickets = request.form.get("tickets")
-        )
-        db.session.add(new_booking)
-        event.tickets = event.tickets - new_booking.tickets
-        db.session.commit()
-        flash("Your tickets are ready", category="success")
-        return redirect(url_for('home'))
-  else:
-    flash("Event could not be found", category="danger")
-    return redirect(url_for('home'))
-  return render_template("book.html", event=event, roles=roles)
-
-@app.route("/payment/<int:booking_id>")
-def payment(booking_id):
-  booking = Bookings.query.get(booking_id)
-  event = Event.query.get(booking.event)
-  total = event.price * booking.tickets
-  try:
-    checkout_session = stripe.checkout.Session.create(
-      line_items = [
-        {
-          'price_data': {
-            'currency': 'KES',
-            'product_data': {
-              'name': f"{event.name}'s tickets",
-            },
-            'unit_amount': (total*100),
-          },
-          'quantity': 1,
-        }
-      ],
-      payment_method_types=["card"],
-      mode='payment',
-      success_url=request.host_url + f'payment-complete/{booking.id}',
-      cancel_url=request.host_url + f'payment-failed/{booking.id}',
-    )
-    return redirect(checkout_session.url)
-  
-  except:
-    event.tickets = event.tickets + booking.tickets
-    db.session.delete(booking)
-    db.session.commit()
-    flash(f"Failed to initialize connection to the stripe server", category="warning")
-    return redirect(url_for('home'))
-
-@app.route("/payment-complete/<int:booking_id>")
-def payment_complete(booking_id):
-  booking = Bookings.query.get(booking_id)
-  booking.status = "Complete"
-  db.session.commit()
-  flash("Payment successfull, your tickets are ready", category="success")
-  return redirect(url_for('home'))
-
-@app.route("/payment-failed/<int:booking_id>")
-def payment_failed(booking_id):
-  booking = Bookings.query.get(booking_id)
-  event = Event.query.get(booking.event)
-  event.tickets = event.tickets + booking.tickets
-  db.session.delete(booking)
-  db.session.commit()
-  flash("Payment failed", category="danger")
-  return redirect(url_for('home'))
-
-@app.route("/logout")
-@login_required
-def logout():
-  logout_user()
-  flash("Logout successfull", category="success")
-  return redirect(url_for('login'))
+    flash("Unable to load user", category="danger")
 
 if __name__ == "__main__":
   app.run(debug=True)

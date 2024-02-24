@@ -20,30 +20,28 @@
       {{ event.start_time.strftime("%I:%M %p") }}
     </p>
   </div>
-  <form action="{{ url_for('tickets', event_id=event.id) }}" method="post">
+  <form action="{{ url_for('users.tickets', event_id=event.id) }}" method="post">
+    {{ form.csrf_token }}
+    <div class="input">
+      {{ form.first_name.label }}
+      {{ form.first_name(placeholder="Enter First Name", value=current_user.first_name, class="name") }}
+    </div>
+    <div class="input">
+      {{ form.last_name.label }}
+      {{ form.last_name(placeholder="Enter Last Name", value=current_user.surname, class="name") }}
+    </div>
+    <div class="input">
+      {{ form.email.label }}
+      {{ form.email(placeholder="Enter Email Address", value=current_user.email, class="name") }}
+    </div>
+    <div class="input">
+      {{ form.phone_number.label }}
+      {{ form.phone_number(placeholder="Enter Phone Number", value=current_user.phone, class="name") }}
+    </div>
     <div class="input note">
-      <label for="tickets">No of tickets</label>
-      <input name="tickets" required type="number" id="tickets" placeholder="No of tickets">
+      {{ form.tickets.label }}
+      {{ form.tickets(placeholder="No of tickets", class="name") }}
     </div>
-    {% if current_user.is_authenticated %}
-    {% else %}
-    <div class="input">
-      <label for="fname">First Name</label>
-      <input name="fname" required type="text" id="fname" placeholder="First Name">
-    </div>
-    <div class="input">
-      <label for="surname">Last Name</label>
-      <input name="sname" required type="text" id="surname" placeholder="Last Name">
-    </div>
-    <div class="input">
-      <label for="email">Email Address</label>
-      <input name="email" required type="email" id="email" placeholder="Email Address">
-    </div>
-    <div class="input">
-      <label for="phone">Phone Number</label>
-      <input name="phone" required type="number" id="phone" placeholder="Phone Number">
-    </div>
-    {% endif %}
     <!-- <div class="more-inputs"></div>
   <div class="more-people">
     <p>+ Add person</p>

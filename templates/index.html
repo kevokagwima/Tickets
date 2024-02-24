@@ -22,14 +22,12 @@ Home
       </div>
     </div>
     {% if current_user.role == 1 %}
-    <a id="event-link" href="{{ url_for('create_event') }}">Create Event</a>
+    <a id="event-link" href="{{ url_for('admin.create_event') }}">Create Event</a>
     {% endif %}
   </div>
   <div class="all-events">
     <div id="upcoming" class="tabcontent">
-      <h1 id="header">
-        Upcoming Events
-      </h1>
+      <h1 id="header">Upcoming Events</h1>
       <div class="events-box">
         {% set upcoming_events = [] %}
         {% for event in events if event.status == "Active" or event.status == "Sold Out" %}
@@ -41,7 +39,7 @@ Home
           <div class="image-box">
             <img src="../static/images/banner.png" alt="event-img">
           </div>
-          <a href="{{ url_for('event_details', event_id=event.id) }}">
+          <a href="{{ url_for('admin.event_details', event_id=event.id) }}">
             <div class="event-info">
               <div class="event-header">
                 <h1>{{ event.name }}</h1>
@@ -57,12 +55,10 @@ Home
               </div>
               <p class="event-loc">
                 Location: {{ event.location }}
-                <span>
-                  {{ "{:,}".format(event.tickets) }}
-                  {% if event.tickets == 1 %}
-                  ticket{% else %}tickets{% endif %}
-                  remaining
-                </span>
+                {% if event.tickets
+                < 10 %} <span id="selling-out">Almost selling out
+                  </span>
+                  {% endif %}
               </p>
               <div class="event-dates">
                 <p>Start Date: <b>{{ event.start_date.strftime("%d/%m/%Y") }}</b></p>
@@ -78,21 +74,11 @@ Home
                     {% if event.price < 100 %} Free {% else %} {{ "Ksh {:,}" .format(event.price) }} {% endif %} </h4>
                 </div>
                 <div class="tickets">
-                  {% if event.tickets <= 0 %} <button id="tickets" disabled>Sold Out</button>
+                  {% if event.tickets < 1 %} <button id="tickets" disabled>Sold Out</button>
                     {% else %}
-                    <button id="tickets">
-                      <a href="{{ url_for('tickets', event_id=event.id) }}">
-                        <img src="{{ url_for('static', filename='Images/tickets.png') }}" alt="Edit Event">
-                        Get Tickets
-                      </a>
-                    </button>
-                    {% endif %}
-                    {% if current_user.role == 1 and event.user == current_user.id %}
-                    <a id="ticket" href="{{ url_for('edit_event', event_id=event.unique_id) }}">
-                      <img src="{{ url_for('static', filename='Images/editing.png') }}" alt="Edit Event">
-                    </a>
-                    <a id="ticket" href="{{ url_for('delete_event', event_id=event.unique_id) }}">
-                      <img src="{{ url_for('static', filename='Images/delete.png') }}" alt="Edit Event">
+                    <a id="tickets" href="{{ url_for('users.tickets', event_id=event.id) }}">
+                      <img src="{{ url_for('static', filename='Images/tickets.png') }}" alt="Edit Event">
+                      Buy Ticket
                     </a>
                     {% endif %}
                 </div>
@@ -107,9 +93,7 @@ Home
       </div>
     </div>
     <div id="past" class="tabcontent">
-      <h1 id="header">
-        Past Events
-      </h1>
+      <h1 id="header">Past Events</h1>
       <div class="events-box">
         {% set past_events = [] %}
         {% for event in events if event.status == "Ended" %}
