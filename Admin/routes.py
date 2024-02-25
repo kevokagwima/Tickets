@@ -2,40 +2,23 @@ from flask import Blueprint, flash, redirect, render_template, url_for, request
 from flask_login import login_required, current_user
 from models import *
 from form import *
-from datetime import date, datetime
+from datetime import date
 from io import BytesIO
-import qrcode, boto3
+import qrcode, boto3, os
 
 admin = Blueprint("admin", __name__)
 s3 = boto3.resource(
   "s3",
-  aws_access_key_id = "AKIAW3MEB6Z756PC7WX4",
-  aws_secret_access_key = "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"
+  aws_access_key_id = os.environ.get("AWS_ACCESS_KEY"),
+  aws_secret_access_key = os.environ.get("AWS_SECRET_KEY")
 )
 client = boto3.client(
   "s3",
-  aws_access_key_id = "AKIAW3MEB6Z756PC7WX4",
-  aws_secret_access_key = "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"
+  aws_access_key_id = os.environ.get("AWS_ACCESS_KEY"),
+  aws_secret_access_key = os.environ.get("AWS_SECRET_KEY")
 )
-bucket_name = "soundsoffreedom"
+bucket_name = os.environ.get("BUCKET_NAME")
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png"}
-
-@admin.before_request
-def event_expiry():
-  all_events = Event.query.filter_by(status="Active").all()
-  for event in all_events:
-    today = date.today()
-    current_time = datetime.now()
-    if event.end_date < today or (event.end_date == today and event.end_time.strftime("%H:%M") < current_time.strftime("%H:%M")):
-      event.status = "Ended"
-      qrcodes = Qrcodes.query.filter_by(event=event.id).all()
-      for qrcode in qrcodes:
-        qrcode.status = "Closed"
-        db.session.commit()
-    if event.tickets <= 0:
-      event.status = "Sold Out"
-    db.session.commit()
-  return None
 
 @admin.route("/create-event", methods=["POST", "GET"])
 @login_required
@@ -85,7 +68,7 @@ def generate_qrcode(event_id, tickets):
         event = event_id,
         unique_id = random.randint(100000000,999999999),
         bucket = bucket_name,
-        region = "eu-north-1"
+        region = os.environ.get("REGION")
       )
       db.session.add(new_qrcode)
       db.session.commit()
@@ -116,7 +99,7 @@ def event_details(event_id):
 def edit_event(event_id):
   event = Event.query.filter_by(unique_id=event_id).first()
   form = EventForm()
-  form.description.data = event.description
+  # form.description.data = event.description
   form.start_time.data = event.start_time
   form.end_time.data = event.end_time
   if request.method == "POST":

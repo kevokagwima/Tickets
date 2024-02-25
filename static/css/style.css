@@ -55,7 +55,6 @@
 
 .all-events {
   margin-top: 1rem;
-  max-height: 78.8svh;
   overflow: hidden;
   padding: 0.3rem;
 }
@@ -64,11 +63,8 @@
   margin-top: 1rem;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  align-items: center;
   gap: 2rem;
-  min-height: max-content;
-  padding-right: 0.3rem;
-  padding-bottom: 1rem;
+  padding: 0.3rem;
   overflow: scroll;
 }
 
@@ -76,13 +72,13 @@
   border-radius: 1rem;
   background-color: var(--main-bgcolor);
   overflow: hidden;
-  display: flex;
+  display: grid;
+  grid-template-columns: 2rem auto;
+  box-shadow: 0 0 30px -20px rgba(0, 0, 0, 0.3);
 }
 
 .image-box {
-  max-height: 100%;
-  max-width: 2rem;
-  min-width: 2rem;
+  width: 2rem;
   overflow: hidden;
 }
 
@@ -95,7 +91,7 @@
 
 .event-info {
   padding: 1rem;
-  width: 100%;
+  min-width: 100%;
 }
 
 .event-header {
@@ -198,6 +194,14 @@
   color: var(--highlight-bgcolor);
 }
 
+#tickets-btn {
+  padding: 0.4rem 1rem;
+  border-radius: 30rem;
+  cursor: pointer;
+  font-size: 1.8ch;
+  color: var(--main-bgcolor);
+}
+
 #tickets {
   display: flex;
   align-items: center;
@@ -211,7 +215,7 @@
   font-family: var(--paragraph-font);
 }
 
-#tickets:disabled {
+#tickets-btn:disabled {
   background-color: rgb(206, 206, 206);
   color: grey;
 }

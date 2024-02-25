@@ -68,6 +68,10 @@ a {
   color: var(--highlight-bgcolor);
 }
 
+button {
+  border: none;
+}
+
 button:disabled {
   background-color: grey;
 }
