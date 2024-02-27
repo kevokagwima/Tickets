@@ -1,160 +1,163 @@
-body {
-  background-color: var(--sec-bgcolor);
-}
-
 .event-header {
-  min-height: 20rem;
-  max-height: 20rem;
+  padding: 1rem 2rem;
   background-image: url(../images/banner.png);
   background-repeat: no-repeat;
   background-size: cover;
+  min-height: 20svh;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 }
 
-.heading {
-  padding: 2rem;
+.event-header-info {
+  color: var(--main-bgcolor);
   text-align: center;
 }
 
-.heading h1 {
-  font-family: var(--header-font);
-  font-size: 8ch;
-  color: var(--main-bgcolor);
+.event-header-info h1 {
+  font-size: 5ch;
 }
 
-.heading h4 {
-  font-family: var(--paragraph-font);
+.event-header-info h4 {
+  font-size: 3ch;
   color: var(--sec-bgcolor);
 }
 
-.tickets {
-  margin: 2rem 0;
-  display: flex;
-  justify-content: center;
+.event-box {
+  display: grid;
+  grid-template-columns: 1fr 30rem;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.event-description,
+.event-details {
+  padding: 1rem;
+}
+
+.event-description h1,
+.event-details h1 {
+  margin-bottom: 0.5rem;
+}
+
+.event-details {
+  background-color: var(--main-bgcolor);
+  border-radius: 0.3rem;
+}
+
+.event-details-info {
+  display: grid;
   gap: 1rem;
+  margin-top: 2rem;
+}
+
+.event-dates {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.event-actions {
+  margin-top: 1rem;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
-#tickets {
-  background-color: greenyellow;
-  border: none;
-  padding: 0.3em 1em;
+.event-actions button {
+  background-color: var(--highlight-bgcolor);
+  padding: 0.5em 1em;
   border-radius: 30rem;
-}
-
-#tickets:disabled {
-  background-color: rgb(206, 206, 206);
-  color: grey;
-}
-
-#tickets a {
+  color: var(--main-bgcolor);
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: var(--paragraph-font);
-  color: black;
-  font-size: 2ch;
 }
 
-.tickets img {
+.event-actions button img {
+  max-height: 1.5rem;
+}
+
+.event-actions button:disabled {
+  background-color: grey;
+  cursor: auto;
+}
+
+.edit-btns {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.edit-btns img {
   max-height: 2rem;
 }
 
-.event-info {
-  padding: 0 2rem;
-  display: grid;
-  row-gap: 2rem;
-}
-
-.date-info {
-  margin-top: -3.5rem;
-  background-color: var(--main-bgcolor);
-  padding: 1.5rem 1rem;
-  border-radius: 1rem;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-}
-
-.date-info h4 {
-  font-family: var(--header-font);
-  font-size: 3ch;
-}
-
-.date-info p {
-  font-family: var(--paragraph-font);
-  font-size: 2.2ch;
-  margin: 0.5rem 0 0.3rem;
-}
-
-.date-info span {
-  font-family: var(--links-font);
-}
-
-.event-desc {
-  display: grid;
-  row-gap: 1rem;
-  padding: 0 6.6rem;
-}
-
-.event-desc h4 {
-  font-family: var(--header-font);
-  font-size: 3ch;
-}
-
-.event-desc p {
-  font-family: var(--paragraph-font);
-  font-size: 2.2ch;
-}
-
-@media screen and (max-width: 600px) {
-  .heading h1 {
-    font-size: 5.5ch;
+@media screen and (max-width: 1000px) {
+  .event-box {
+    grid-template-columns: 1fr 25rem;
   }
 
-  .heading h4 {
+  .event-dates p {
+    display: grid;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .event-box {
+    grid-template-columns: 1fr;
+  }
+
+  .event-description {
+    padding-inline: 0;
+  }
+
+  .event-dates p {
+    display: block;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .event-header-info h1 {
+    font-size: 3.5ch;
+  }
+
+  .event-header-info h4 {
     font-size: 2.5ch;
   }
 
-  .tickets img {
-    max-height: 2rem;
-  }
-
-  .date-info {
-    display: grid;
-    grid-template-columns: repeat(2, auto);
-    gap: 2rem;
-    justify-content: center;
-    text-align: center;
-  }
-
-  .date-info h4 {
-    font-size: 3ch;
+  .event-box,
+  .event-header {
+    padding-inline: 1rem;
   }
 }
 
 @media screen and (max-width: 500px) {
-  .heading h1 {
-    font-size: 5ch;
+  .event-dates p {
+    display: grid;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .event-header-info h1 {
+    font-size: 3ch;
   }
 
-  .heading h4 {
+  .event-header-info h4 {
     font-size: 2ch;
   }
 
-  .tickets img {
-    max-height: 1.5rem;
+  .event-description h1,
+  .event-details h1 {
+    font-size: 2.5ch;
   }
 
-  .date-info {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    gap: 1.5rem;
+  .event-description p,
+  .event-dates p {
+    font-size: 1.8ch;
   }
-  .date-info h4 {
-    font-size: 3ch;
+
+  .edit-btns {
+    gap: 1rem;
   }
 }

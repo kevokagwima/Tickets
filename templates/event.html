@@ -10,63 +10,69 @@
 {% endblock %}
 
 {% block body %}
-<div class="event-header">
-  <div class="heading">
-    <h1>{{ event.name }}</h1>
-    <h4>{{ event.tagline }}</h4>
-    <div class="tickets">
-      {% if event.tickets <= 0 %} <button id="tickets" disabled>Sold out</button>
-        {% else %}
-        <button id="tickets">
-          <a href="{{ url_for('users.tickets', event_id=event.id) }}">
-            <img src="{{ url_for('static', filename='Images/tickets.png') }}" alt="Edit Event">
-            Get Tickets
-          </a>
-        </button>
-        {% endif %}
-        {% if current_user.role == 1 and event.user == current_user.id %}
-        <a id="ticket" href="{{ url_for('admin.edit_event', event_id=event.unique_id) }}">
-          <img src="{{ url_for('static', filename='Images/editing.png') }}" alt="Edit Event">
-        </a>
-        <a id="ticket" href="{{ url_for('admin.delete_event', event_id=event.unique_id) }}">
-          <img src="{{ url_for('static', filename='Images/delete.png') }}" alt="Delete Event">
-        </a>
-        {% endif %}
+<div class="container">
+  <div class="event-header">
+    <div class="event-header-info">
+      <h1>{{ event.name }}</h1>
+      <h4>{{ event.tagline }}</h4>
+    </div>
+  </div>
+  <div class="event-box">
+    <div class="event-description">
+      <h1>Event Description</h1>
+      <p>{{ event.description }}</p>
+    </div>
+    <div class="event-details">
+      <h1>Event Details</h1>
+      <div class="event-details-info">
+        <div class="event-location">
+          <h4>Location</h4>
+          <p>{{ event.location }}</p>
+        </div>
+        <div class="event-dates">
+          <p>Start Date: <b>{{ event.start_date.strftime("%d/%m/%Y") }}</b></p>
+          <p>End Date: <b>{{ event.end_date.strftime("%d/%m/%Y") }}</b></p>
+          <p>Start Time: <b>{{ event.start_time.strftime("%I:%M %p") }}</b></p>
+          <p>End Time: <b>{{ event.end_time.strftime("%I:%M %p") }}</b></p>
+        </div>
+        <div class="event-actions">
+          <div class="tickets-btn">
+            {% if event.status == "Sold Out" %}
+            <button disabled>
+              <img src="{{ url_for('static', filename='Images/tickets.png') }}" alt="Edit Event">
+              Sold Out
+            </button>
+            {% elif event.status == "Ended" %}
+            <button disabled="disabled">
+              <img src="{{ url_for('static', filename='Images/tickets.png') }}" alt="Edit Event">
+              Ended
+            </button>
+            {% else %}
+            <a href="{{ url_for('users.tickets', event_id=event.id) }}">
+              <button>
+                <img src="{{ url_for('static', filename='Images/tickets.png') }}" alt="Edit Event">
+                Buy Ticket
+              </button>
+            </a>
+            {% endif %}
+          </div>
+          {% if event.user == current_user.id %}
+          <div class="edit-btns">
+            <a href="{{ url_for('admin.edit_event', event_id=event.unique_id) }}">
+              <img src="../static/images/editing.png" alt="">
+            </a>
+            <a href="{{ url_for('admin.delete_event', event_id=event.unique_id) }}">
+              <img src="../static/images/delete.png" alt="">
+            </a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
     </div>
   </div>
 </div>
-<div class="event-info">
-  <div class="date-info">
-    <div id="start">
-      <h4>Start Date</h4>
-      <p>
-        {{ event.start_date.strftime("%d/%m/%Y")}} -
-        <span>{{ event.start_time.strftime("%I:%M %p") }}</span>
-      </p>
-    </div>
-    <div id="end">
-      <h4>End Date</h4>
-      <p>
-        {{ event.end_date.strftime("%d/%m/%Y")}} -
-        <span>{{ event.end_time.strftime("%I:%M %p") }}</span>
-      </p>
-    </div>
-    <div id="location">
-      <h4>Location</h4>
-      <p>{{ event.location }}</p>
-    </div>
-    <div id="ticket">
-      <h4>Available Tickets</h4>
-      <p>{{ "{:,}".format(event.tickets) }} tickets remaining</p>
-    </div>
-  </div>
-  {% if event.description %}
-  <div class="event-desc">
-    <h4>Event Description</h4>
-    <p>{{ event.description }}</p>
-  </div>
-  {% endif %}
-</div>
+{% endblock %}
 
-<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% block script %}
+<script src="../static/js/auth.js"></script>
 {% endblock %}

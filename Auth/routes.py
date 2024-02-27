@@ -6,7 +6,7 @@ from models import *
 auth = Blueprint("auth", __name__)
 
 @auth.route("/signup", methods=["POST", "GET"])
-def register():
+def signup():
   form = RegistrationForm()
   form.account.choices = [(role.id, role.role_name) for role in Role.query.all()]
   if request.method == "POST":
@@ -22,16 +22,16 @@ def register():
       db.session.add(new_user)
       db.session.commit()
       flash("Registration successfull", category="success")
-      return redirect(url_for('auth.login'))
+      return redirect(url_for('auth.signin'))
     
     if form.errors != {}:
       for err_msg in form.errors.values():
         flash(f"{err_msg}", category="danger")
 
-  return render_template("register.html", form=form)
+  return render_template("signup.html", form=form)
 
 @auth.route("/signin", methods=["POST", "GET"])
-def login():
+def signin():
   form = LoginForm()
   if request.method == "POST":
     if form.validate_on_submit():
@@ -42,20 +42,20 @@ def login():
         return redirect(url_for("users.home"))
       elif user is None:
         flash("No user with that email", category="danger")
-        return redirect(url_for('auth.login'))
+        return redirect(url_for('auth.signin'))
       else:
         flash("Invalid credentials", category="danger")
-        return redirect(url_for('auth.login'))
+        return redirect(url_for('auth.signin'))
 
   if form.errors != {}:
     for err_msg in form.errors.values():
       flash(f"{err_msg}", category="danger")
 
-  return render_template("login.html", form=form)
+  return render_template("signin.html", form=form)
 
 @auth.route("/logout")
 @login_required
 def logout():
   logout_user()
   flash("Logout successfull", category="success")
-  return redirect(url_for('auth.login'))
+  return redirect(url_for('auth.signin'))

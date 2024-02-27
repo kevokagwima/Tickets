@@ -13,60 +13,68 @@
 </head>
 {% endblock %}
 
-<body>
-  <header>
-    <a href="{{ url_for('users.home') }}">
-      <img id="logo" src="../static/images/Screenshot.png" alt="sofafrica.com logo">
-    </a>
-    <div class="links-box">
-      {% if current_user.is_authenticated %}
-      <div class="account">
-        <div class="account-info">
-          <p>{{ current_user.user_role.role_name }}</p>
-          <img src="../static/images/profile.png" alt="user-profile">
-        </div>
-        <div class="bookings">
-          <div class="booking">
-            <a href="#">
-              <p>Profile</p>
-            </a>
-            <a href="{{ url_for('users.orders') }}">
-              <p> My Tickects</p>
-            </a>
-            {% if current_user.role == 1 %}
-            <a href="#">
-              <p> My Events</p>
-            </a>
-            {% endif %}
-            <a href="{{ url_for('auth.logout') }}">
-              <p id="logout">Logout</p>
-            </a>
-          </div>
+<header>
+  <a href="{{ url_for('users.home') }}">
+    <img id="logo" src="../static/images/Screenshot.png" alt="sofafrica.com logo">
+  </a>
+  <div class="links-box">
+    {% if current_user.is_authenticated %}
+    <div class="account">
+      <div class="account-info">
+        <p>{{ current_user.user_role.role_name }}</p>
+        <img src="../static/images/profile.png" alt="user-profile">
+      </div>
+      <div class="bookings">
+        <div class="booking">
+          <a href="#">
+            <p>Profile</p>
+          </a>
+          <a href="{{ url_for('users.orders') }}">
+            <p> My Tickects</p>
+          </a>
+          {% if current_user.role == 1 %}
+          <a href="#">
+            <p> My Events</p>
+          </a>
+          {% endif %}
+          <a href="{{ url_for('auth.logout') }}">
+            <p id="logout">Logout</p>
+          </a>
         </div>
       </div>
-      {% else %}
-      <div class="links">
-        <a id="link" href="{{ url_for('auth.register') }}">Sign Up</a>
-        <a id="link" href="{{ url_for('auth.login') }}">Sign In</a>
-      </div>
-      {% endif %}
     </div>
-  </header>
-  {% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-  <div class="tops">
-    {% for category, message in messages %}
-    <div class="alert alert-{{category}}">
-      {{ message }}
+    {% else %}
+    <div class="links">
+      <a id="link" href="{{ url_for('auth.signup') }}">Sign Up</a>
+      <a id="link" href="{{ url_for('auth.signin') }}">Sign In</a>
     </div>
-    {% endfor %}
+    {% endif %}
   </div>
-  {% endif %}
-  {% endwith %}
+  <div class="burger">
+    <div class="div"></div>
+    <div class="div"></div>
+    <div class="div"></div>
+  </div>
+</header>
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div class="tops">
+  {% for category, message in messages %}
+  <div class="alert alert-{{category}}">
+    {{ message }}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+
+<body>
   {% block body %}
   {% endblock %}
-
-  <script src="{{ url_for('static', filename='js/layout.js') }}"></script>
 </body>
+
+{% block script %}
+{% endblock %}
+<script src="{{ url_for('static', filename='js/layout.js') }}"></script>
 
 </html>

@@ -35,11 +35,25 @@ def home():
   current_time = datetime.now()
   return render_template("index.html", events=events, today=today, current_time=current_time)
 
+@users.route("/event-details/<int:event_id>")
+def event_details(event_id):
+  try:
+    event = Event.query.get(event_id)
+    if event:
+      return render_template("event.html", event=event)
+    else:
+      flash("Event not found", category="danger")
+      return redirect(url_for('users.home'))
+  except:
+    flash("An error ocurred", category="danger")
+    return redirect(url_for('users.home'))
+
 @users.route("/tickets/<int:event_id>", methods=["POST", "GET"])
 @login_required
 def tickets(event_id):
   event = Event.query.get(event_id)
   form = TicketForm()
+  form.ticket.choices = [(ticket.id, f"{ticket.name} - Ksh {'{:,}'.format(ticket.amount)}") for ticket in Pricing.query.filter_by(event=event.id).all()]
   if event:
     if form.validate_on_submit():
       if int(request.form.get("tickets")) > event.tickets:
@@ -49,10 +63,14 @@ def tickets(event_id):
         new_booking = Bookings(
           user = current_user.id,
           event = event.id,
+          ticket = form.ticket.data,
           tickets = form.tickets.data
         )
         db.session.add(new_booking)
         event.tickets = event.tickets - int(new_booking.tickets)
+        db.session.commit()
+        pricing = Pricing.query.filter_by(id=new_booking.ticket).first()
+        new_booking.total = pricing.amount * int(new_booking.tickets)
         db.session.commit()
         for i in range(new_booking.tickets):
           qrcode = Qrcodes.query.filter_by(event=event.id, status="Active").first()
@@ -74,10 +92,14 @@ def tickets(event_id):
         new_booking = Bookings(
           user = new_user.id,
           event = event.id,
-          tickets = request.form.get("tickets")
+          ticket = form.ticket.data,
+          tickets = form.tickets.data
         )
         db.session.add(new_booking)
         event.tickets = event.tickets - new_booking.tickets
+        db.session.commit()
+        pricing = Pricing.query.filter_by(id=new_booking.ticket).first()
+        new_booking.total = pricing.amount * int(new_booking.tickets)
         db.session.commit()
         flash("Your tickets are ready", category="success")
         return redirect(url_for('users.home'))
@@ -116,7 +138,6 @@ def payment(booking_id):
       cancel_url=request.host_url + f'payment-failed/{booking.id}',
     )
     return redirect(checkout_session.url)
-  
   except:
     event.tickets = event.tickets + booking.tickets
     db.session.delete(booking)

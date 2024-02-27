@@ -47,17 +47,56 @@ def create_event():
         end_date = end_date,
         start_time = form.start_time.data,
         end_time = form.end_time.data,
-        price = form.price.data,
         location = form.location.data,
         tickets = form.no_of_tickets.data,
         user = current_user.id
       )
       db.session.add(new_event)
       db.session.commit()
-      generate_qrcode(new_event.id, new_event.tickets)
+      generate_qrcode(event.id, new_event.tickets)
       flash(f"Event '{new_event.name}' created successfully", category="success")
-      return redirect(url_for('users.home'))
+      return redirect(url_for('admin.pricing', event_id=new_event.id))
   return render_template("create_event.html", form=form)
+
+@admin.route("/pricing/<int:event_id>", methods=["POST", "GET"])
+def pricing(event_id):
+  try:
+    event = Event.query.get(event_id)
+    pricing = Pricing.query.filter_by(event=event.id).all()
+    form = PricingForm()
+    if request.method == "POST":
+      if form.validate_on_submit():
+        new_pricing = Pricing(
+          name = form.name.data,
+          amount = form.price.data,
+          event = event.id
+        )
+        db.session.add(new_pricing)
+        db.session.commit()
+        flash(f"Ticket added for {event.name}", category="success")
+        return redirect(url_for('admin.pricing', event_id=event.id))
+    return render_template("pricing.html", event=event, form=form, pricing=pricing)
+  except:
+    flash("An error occurred", category="danger")
+    return redirect(url_for('users.home'))
+
+@admin.route("/remove-pricing/<int:event_id>/<int:pricing_id>")
+def remove_pricing(event_id, pricing_id):
+  try:
+    event = Event.query.get(event_id)
+    if event:
+      pricing = Pricing.query.get(pricing_id)
+      if pricing:
+        db.session.delete(pricing)
+        db.session.commit()
+        flash("Ticket removed successfully", category="success")
+        return redirect(url_for('admin.pricing', event_id=event.id))
+    else:
+      flash("Event not found", category="danger")
+      return redirect(url_for('admin.pricing', event_id=event.id))
+  except:
+    flash("An error occurred", category="danger")
+    return redirect(url_for('users.home'))
 
 def generate_qrcode(event_id, tickets):
   event = Event.query.get(event_id)
@@ -81,55 +120,45 @@ def generate_qrcode(event_id, tickets):
       image_name = f"{folder_name}/" + str(new_qrcode.unique_id) + '.png'
       s3.Bucket(bucket_name).upload_fileobj(img_buffer, image_name)
 
-@admin.route("/event-details/<int:event_id>")
-def event_details(event_id):
-  try:
-    event = Event.query.get(event_id)
-    if event:
-      return render_template("event.html", event=event)
-    else:
-      flash("Event not found", category="danger")
-      return redirect(url_for('users.home'))
-  except:
-    flash("An error ocurred", category="danger")
-    return redirect(url_for('users.home'))
-
 @admin.route("/edit-event/<int:event_id>", methods=["POST", "GET"])
 @login_required
 def edit_event(event_id):
   event = Event.query.filter_by(unique_id=event_id).first()
-  form = EventForm()
-  # form.description.data = event.description
-  form.start_time.data = event.start_time
-  form.end_time.data = event.end_time
-  if request.method == "POST":
-    if form.validate_on_submit():
-      today_date = date.today()
-      if form.start_date.data != event.start_date or form.start_date.data > event.start_date or form.end_date.data < today_date or form.end_date.data < event.start_date:
-        if form.start_date.data < today_date or form.end_date.data < today_date or form.end_date.data < event.start_date:
-          flash("Invalid date", category="danger")
-          return redirect(url_for('admin.edit_event', event_id=event.unique_id))
-      event.name = form.name.data
-      event.tagline = form.tagline.data
-      event.description = form.description.data
-      event.start_date = form.start_date.data
-      if form.start_date.data > form.end_date.data:
-        event.end_date = form.start_date.data
-      else:
-        event.end_date = form.end_date.data
-      event.start_time = form.start_time.data
-      event.end_time = form.end_time.data
-      event.location = form.location.data
-      event.price = form.price.data
-      event.tickets = form.no_of_tickets.data
-      db.session.commit()
-      flash(f"Event {event.name} updated successfully", category="success")
-      return redirect(url_for('users.home'))
-    
-    if form.errors != {}:
-      for err_msg in form.errors.values():
-        flash(f"{err_msg}", category="danger")
-
+  if event:
+    form = EventForm()
+    form.description.data = event.description
+    form.start_time.data = event.start_time
+    form.end_time.data = event.end_time
+    if request.method == "POST":
+      if form.validate_on_submit():
+        today_date = date.today()
+        if form.start_date.data != event.start_date or form.start_date.data > event.start_date or form.end_date.data < today_date or form.end_date.data < event.start_date:
+          if form.start_date.data < today_date or form.end_date.data < today_date or form.end_date.data < event.start_date:
+            flash("Invalid date", category="danger")
+            return redirect(url_for('admin.edit_event', event_id=event.unique_id))
+        event.name = form.name.data
+        event.tagline = form.tagline.data
+        event.description = form.description.data
+        event.start_date = form.start_date.data
+        if form.start_date.data > form.end_date.data:
+          event.end_date = form.start_date.data
+        else:
+          event.end_date = form.end_date.data
+        event.start_time = form.start_time.data
+        event.end_time = form.end_time.data
+        event.location = form.location.data
+        event.price = form.price.data
+        event.tickets = form.no_of_tickets.data
+        db.session.commit()
+        flash(f"Event {event.name} updated successfully", category="success")
+        return redirect(url_for('users.home'))
+      
+      if form.errors != {}:
+        for err_msg in form.errors.values():
+          flash(f"{err_msg}", category="danger")
+  else:
+    flash("Event not found", category="danger")
+    return redirect(url_for('users.home'))
   return render_template("edit_event.html", event=event, form=form)
 
 @admin.route("/delete-event/<int:event_id>")

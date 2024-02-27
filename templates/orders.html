@@ -11,26 +11,29 @@ Orders
 
 {% block body %}
 <div class="container">
+  <h1>My Tickets</h1>
   <div class="orders-box">
     {% for booking in bookings %}
     <div class="orders">
       <div class="heading">
-        <h1>{{ booking.booking_owners.name }}<h1>
-            {% set tickets = [] %}
-            {% for qrcode in qrcodes if qrcode.booking == booking.id %}
-            {{ tickets.append(qrcode) or "" }}
-            {% endfor %}
-            <p>{{ tickets|count }} ticket(s)</p>
+        <h1>{{ booking.booking_owners.name }}</h1>
+        {% set tickets = [] %}
+        {% for qrcode in qrcodes if qrcode.booking == booking.id %}
+        {{ tickets.append(qrcode) or "" }}
+        {% endfor %}
+        <p>{{ tickets|count }} ticket(s)</p>
       </div>
       <hr>
       <div class="order-details">
         {% for ticket in tickets %}
-        <a download
-          href="https://{{ ticket.bucket }}.s3.{{ ticket.region }}.amazonaws.com/{{ ticket.qrcode_event.name }}/{{ ticket.unique_id }}.png">
+        <div class="tickets">
           <img
             src="https://{{ ticket.bucket }}.s3.{{ ticket.region }}.amazonaws.com/{{ ticket.qrcode_event.name }}/{{ ticket.unique_id }}.png"
             alt="{{ ticket.unique_id }}">
-        </a>
+          <a download
+            href="https://{{ ticket.bucket }}.s3.{{ ticket.region }}.amazonaws.com/{{ ticket.qrcode_event.name }}/{{ ticket.unique_id }}.png">Download
+            Ticket</a>
+        </div>
         {% endfor %}
       </div>
     </div>

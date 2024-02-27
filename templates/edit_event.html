@@ -42,17 +42,16 @@ Edit Event {{ event.name }}
       {{ form.end_time.label }}
       {{ form.end_time(class="name") }}
     </div>
-    <div class="input extend">
+    <div class="input">
       {{ form.location.label }}
       {{ form.location(placeholder="Event Venue", value=event.location, class="name") }}
     </div>
     <div class="input">
-      {{ form.price.label }}
-      {{ form.price(placeholder="Ticket Price", value=event.price, class="name") }}
-    </div>
-    <div class="input">
       {{ form.no_of_tickets.label }}
       {{ form.no_of_tickets(placeholder="No of available tickets", value=event.tickets, class="name") }}
+    </div>
+    <div class="info extend">
+      <a href="{{ url_for('admin.pricing', event_id=event.id) }}">Update Pricing</a>
     </div>
     <button class="btn extend" type="submit">
       <span class="button--text">Update Event</span>

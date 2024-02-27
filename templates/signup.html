@@ -2,7 +2,7 @@
 
 {% block head %}
 {{ super() }}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
 {% endblock %}
 
 {% block title %}
@@ -30,7 +30,7 @@ Registration
       {{ form.phone_number.label }}
       {{ form.phone_number(placeholder="Enter Phone Number", class="name") }}
     </div>
-    <div class="input two">
+    <div class="input extend">
       {{ form.account.label }}
       {{ form.account }}
     </div>
@@ -45,7 +45,7 @@ Registration
     <button class="btn" type="submit">
       <span class="button--text">SIGN UP</span>
     </button>
-    <span id="info">Already have an account? <a href="{{ url_for('auth.login') }}">Sign In</a></span>
+    <span id="info">Already have an account? <a href="{{ url_for('auth.signin') }}">Sign In</a></span>
   </form>
 </div>
 

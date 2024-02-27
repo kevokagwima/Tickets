@@ -49,11 +49,19 @@ class Event(db.Model):
   end_time = db.Column(db.Time(), nullable=False)
   location = db.Column(db.String(50), nullable=False)
   tickets = db.Column(db.Integer(), nullable=False, default=0)
-  price = db.Column(db.Integer(), nullable=False, default=0)
   user = db.Column(db.Integer(), db.ForeignKey("Users.id"))
   status = db.Column(db.String(10), nullable=False, default="Active")
   booking = db.relationship("Bookings", backref="booking_owners", lazy=True)
   qrcode = db.relationship("Qrcodes", backref="qrcode_event", lazy=True)
+  pricing = db.relationship("Pricing", backref="event_price", lazy=True)
+
+class Pricing(db.Model):
+  __tablename__ = "Pricing"
+  id = db.Column(db.Integer(), primary_key=True)
+  name = db.Column(db.String(50), nullable=False, default="Regular")
+  amount = db.Column(db.Integer(), nullable=False, default=0)
+  event = db.Column(db.Integer(), db.ForeignKey("event.id"))
+  booking = db.relationship("Bookings", backref="booking_ticket", lazy=True)
 
 class Bookings(db.Model):
   __tablename__ = "Bookings"
@@ -62,6 +70,8 @@ class Bookings(db.Model):
   user = db.Column(db.Integer(), db.ForeignKey("Users.id"))
   event = db.Column(db.Integer(), db.ForeignKey("event.id"))
   tickets = db.Column(db.Integer(), nullable=False)
+  ticket = db.Column(db.Integer(), db.ForeignKey("Pricing.id"))
+  total = db.Column(db.Integer(), default=0)
   status = db.Column(db.String(10), nullable=False, default="Pending")
   qrcode = db.relationship("Qrcodes", backref="qrcode_booking", lazy=True)
 

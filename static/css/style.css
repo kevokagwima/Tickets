@@ -202,22 +202,21 @@
   color: var(--main-bgcolor);
 }
 
-#tickets {
+#tickets button {
   display: flex;
   align-items: center;
   gap: 0.4rem;
   padding: 0.4rem 1rem;
   border-radius: 30rem;
   cursor: pointer;
-  font-size: 1.8ch;
-  background-color: var(--highlight-bgcolor);
+  font-size: 1.5ch;
   color: var(--main-bgcolor);
   font-family: var(--paragraph-font);
 }
 
-#tickets-btn:disabled {
-  background-color: rgb(206, 206, 206);
-  color: grey;
+#tickets:disabled {
+  background-color: grey;
+  font-size: 1.5ch;
 }
 
 #ticket img,

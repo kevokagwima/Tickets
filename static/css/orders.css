@@ -1,8 +1,19 @@
 .container {
-  padding: 2rem;
+  padding: 1rem 2rem;
+}
+
+.container h1 {
+  font-size: 3ch;
+}
+
+.orders-box {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
 }
 
 .orders {
+  margin-top: 1rem;
   background-color: var(--main-bgcolor);
   border-radius: 0.3rem;
   padding: 1rem;
@@ -14,8 +25,34 @@
   align-items: center;
 }
 
+.orders hr {
+  margin: 0.5rem 0;
+}
+
 .order-details {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-auto-flow: column;
   gap: 1rem;
+  background-color: var(--sec-bgcolor);
+  padding: 1rem;
+}
+
+.tickets {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.tickets img {
+  max-height: 8rem;
+  border-radius: 0.3rem;
+}
+
+.tickets a {
+  background-color: var(--highlight-bgcolor);
+  border-radius: 30rem;
+  color: var(--main-bgcolor);
+  padding: 0.2rem 1rem;
+  font-size: 1.5ch;
 }

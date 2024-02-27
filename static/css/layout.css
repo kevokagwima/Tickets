@@ -23,7 +23,7 @@ body {
   --main-bgcolor: white;
   --sec-bgcolor: whitesmoke;
   --highlight-bgcolor: #ff6900;
-  --gradient: linear-gradient(60deg, aqua, greenyellow);
+  --gradient: linear-gradient(60deg, var(--highlight-bgcolor), black);
   --header-font: "Raleway", sans-serif;
   --paragraph-font: "Montserrat", sans-serif;
   --links-font: "Quicksand", sans-serif;
@@ -70,6 +70,9 @@ a {
 
 button {
   border: none;
+  font-family: var(--paragraph-font);
+  cursor: pointer;
+  background: var(--gradient);
 }
 
 button:disabled {
@@ -111,7 +114,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 0.8rem 2rem;
   background-color: var(--main-bgcolor);
   position: sticky;
   inset: 0 0 auto 0;
@@ -197,6 +200,20 @@ header {
   background-color: red;
 }
 
+.burger {
+  display: grid;
+  gap: 0.2rem;
+  cursor: pointer;
+  display: none;
+}
+
+.div {
+  width: 1.4rem;
+  height: 0.15rem;
+  border-radius: var(--radius);
+  background-color: var(--highlight-bgcolor);
+}
+
 .btn {
   margin-top: 1rem;
   color: var(--main-bgcolor);
@@ -208,7 +225,7 @@ header {
   font-size: 2ch;
   letter-spacing: 1px;
   position: relative;
-  background-color: var(--highlight-bgcolor);
+  background: var(--gradient);
   grid-column: 1/3;
 }
 

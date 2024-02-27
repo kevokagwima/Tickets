@@ -12,44 +12,46 @@
 {% block body %}
 <div class="form">
   <h1 class="header">Book your slot now</h1>
-  <div class="event-box">
-    <h4>{{ event.name }}</h4>
-    <p>
-      {{ event.start_date.strftime("%d/%m/%Y") }}
-      at
-      {{ event.start_time.strftime("%I:%M %p") }}
-    </p>
+  <div class="book-box">
+    <div class="event-box">
+      <h4>{{ event.name }}</h4>
+      <p>
+        {{ event.start_date.strftime("%d/%m/%Y") }}
+        at
+        {{ event.start_time.strftime("%I:%M %p") }}
+      </p>
+    </div>
+    <form action="{{ url_for('users.tickets', event_id=event.id) }}" method="post">
+      {{ form.csrf_token }}
+      <div class="input">
+        {{ form.first_name.label }}
+        {{ form.first_name(placeholder="Enter First Name", value=current_user.first_name, class="name") }}
+      </div>
+      <div class="input">
+        {{ form.last_name.label }}
+        {{ form.last_name(placeholder="Enter Last Name", value=current_user.surname, class="name") }}
+      </div>
+      <div class="input">
+        {{ form.email.label }}
+        {{ form.email(placeholder="Enter Email Address", value=current_user.email, class="name") }}
+      </div>
+      <div class="input">
+        {{ form.phone_number.label }}
+        {{ form.phone_number(placeholder="Enter Phone Number", value=current_user.phone, class="name") }}
+      </div>
+      <div class="input note">
+        {{ form.ticket.label }}
+        {{ form.ticket(placeholder="Ticket Type", class="name") }}
+      </div>
+      <div class="input note">
+        {{ form.tickets.label }}
+        {{ form.tickets(placeholder="No of tickets", class="name") }}
+      </div>
+      <button class="btn note" type="submit">
+        <span class="button--text">Book</span>
+      </button>
+    </form>
   </div>
-  <form action="{{ url_for('users.tickets', event_id=event.id) }}" method="post">
-    {{ form.csrf_token }}
-    <div class="input">
-      {{ form.first_name.label }}
-      {{ form.first_name(placeholder="Enter First Name", value=current_user.first_name, class="name") }}
-    </div>
-    <div class="input">
-      {{ form.last_name.label }}
-      {{ form.last_name(placeholder="Enter Last Name", value=current_user.surname, class="name") }}
-    </div>
-    <div class="input">
-      {{ form.email.label }}
-      {{ form.email(placeholder="Enter Email Address", value=current_user.email, class="name") }}
-    </div>
-    <div class="input">
-      {{ form.phone_number.label }}
-      {{ form.phone_number(placeholder="Enter Phone Number", value=current_user.phone, class="name") }}
-    </div>
-    <div class="input note">
-      {{ form.tickets.label }}
-      {{ form.tickets(placeholder="No of tickets", class="name") }}
-    </div>
-    <!-- <div class="more-inputs"></div>
-  <div class="more-people">
-    <p>+ Add person</p>
-  </div> -->
-    <button class="btn extend" type="submit">
-      <span class="button--text">Book</span>
-    </button>
-  </form>
 </div>
 
 <script src="{{ url_for('static', filename='js/auth.js') }}"></script>

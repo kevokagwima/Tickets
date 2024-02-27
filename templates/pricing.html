@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="../static/css/pricing.css">
+{% endblock %}
+
+{% block title %}
+{{ event.name }}
+{% endblock %}
+
+{% block body %}
+<div class="pricing">
+  <h1>{{ event.name }}</h1>
+  <p>Enter your various ticket prices</p>
+  <div class="pricing-box">
+    {% if pricing %}
+    <div class="pricing-details">
+      <div class="pricing-info">
+        {% for ticket in pricing %}
+        <div class="ticket">
+          <div class="ticket-info">
+            <h4>{{ ticket.name }}</h4>
+            <p>{{ "Ksh {:,}".format(ticket.amount) }}</p>
+          </div>
+          <div class="ticket-actions">
+            <a href="{{ url_for('admin.remove_pricing', event_id=event.id, pricing_id=ticket.id) }}">
+              <img src="../static/images/delete.png" alt="Edit Event">
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    <div class="pricing-form">
+      <form method="post">
+        {{ form.csrf_token }}
+        <div class="input extend">
+          {{ form.name.label }}
+          {{ form.name(placeholder="Ticket Name", class="name") }}
+        </div>
+        <div class="input extend">
+          {{ form.price.label }}
+          {{ form.price(placeholder="Ticket Price", class="name") }}
+        </div>
+        <button class="btn extend" type="submit">
+          <span class="button--text">Add Ticket</span>
+        </button>
+      </form>
+      {% if pricing %}
+      <div class="complete">
+        <a id="complete" href="{{ url_for('users.home') }}">
+          <button>
+            Complete
+          </button>
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% endblock %}

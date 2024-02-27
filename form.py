@@ -45,12 +45,16 @@ class EventForm(FlaskForm):
   start_time = TimeField(label="Start Time", validators=[DataRequired(message="Start Time field is required")])
   end_time = TimeField(label="End Time", validators=[DataRequired(message="End Time field is required")])
   location = StringField(label="Event Location",validators=[DataRequired(message="Event location field is required")])
-  price = IntegerField(label="Ticket Price",validators=[DataRequired(message="Event price field is required")])
   no_of_tickets = IntegerField(label="Available Tickets",validators=[DataRequired(message="No of tickets field is required")])
+
+class PricingForm(FlaskForm):
+  name = StringField(label="Name",validators=[DataRequired(message="Name field is required")])
+  price = IntegerField(label="Ticket Price",validators=[DataRequired(message="Event price field is required")])
 
 class TicketForm(FlaskForm):
   first_name = StringField(label="First Name",validators=[DataRequired(message="First Name field required")])
   last_name = StringField(label="Last Name",validators=[DataRequired(message="Last Name field required")])
   email = EmailField(label="Email Address",validators=[DataRequired(message="Email Address field required")])
   phone_number = StringField(label="Phone Number",validators=[Length(min=10, max=10), DataRequired(message="Phone Number field required")])
+  ticket = SelectField(label="Ticket Type", choices=[], validators=[DataRequired(message="Ticket type field is required")])
   tickets = IntegerField(label="Tickets",validators=[DataRequired(message="Tickets field required")])
