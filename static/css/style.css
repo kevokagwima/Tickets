@@ -199,15 +199,7 @@
   font-weight: bold;
 }
 
-#tickets-btn {
-  padding: 0.4rem 1rem;
-  border-radius: 30rem;
-  cursor: pointer;
-  font-size: 1.8ch;
-  color: var(--main-bgcolor);
-}
-
-#tickets button {
+.tickets button {
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -219,13 +211,7 @@
   font-family: var(--paragraph-font);
 }
 
-#tickets:disabled {
-  background-color: grey;
-  font-size: 1.5ch;
-}
-
-#ticket img,
-#tickets img {
+.tickets button img {
   max-height: 1.5rem;
 }
 

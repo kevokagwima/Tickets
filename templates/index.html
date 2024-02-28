@@ -57,8 +57,7 @@ Home
                 <p class="event-loc">
                   Location: {{ event.location }}
                   {% if event.tickets
-                  < 10 %} <span id="selling-out">Almost selling out
-                    </span>
+                  < 10 and event.status !="Sold Out" %} <span id="selling-out">Almost selling out</span>
                     {% endif %}
                 </p>
                 <div class="event-dates">
@@ -86,14 +85,20 @@ Home
                     {% endif %}
                   </div>
                   <div class="tickets">
-                    {% if event.status == "Sold Out" %} <button id="tickets" disabled>
+                    {% if event.status == "Sold Out" %}
+                    <button disabled>
                       <img src="{{ url_for('static', filename='Images/tickets.png') }}" alt="Edit Event">
                       Sold Out
                     </button>
+                    {% elif event.status == "Ended" %}
+                    <button disabled="disabled">
+                      <img src="{{ url_for('static', filename='Images/tickets.png') }}" alt="Edit Event">
+                      Ended
+                    </button>
                     {% else %}
-                    <a id="tickets" href="{{ url_for('users.tickets', event_id=event.id) }}">
+                    <a href="{{ url_for('users.tickets', event_id=event.id) }}">
                       <button>
-                        <img src="{{ url_for('static', filename='Images/tickets.png') }}" alt="">
+                        <img src="{{ url_for('static', filename='Images/tickets.png') }}" alt="Edit Event">
                         Buy Ticket
                       </button>
                     </a>
