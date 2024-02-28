@@ -194,6 +194,11 @@
   color: var(--highlight-bgcolor);
 }
 
+#multiple {
+  font-size: 1.4ch;
+  font-weight: bold;
+}
+
 #tickets-btn {
   padding: 0.4rem 1rem;
   border-radius: 30rem;

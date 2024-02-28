@@ -40,6 +40,10 @@
   margin-bottom: 0.5rem;
 }
 
+.event-description p {
+  line-height: 1.5;
+}
+
 .event-details {
   background-color: var(--main-bgcolor);
   border-radius: 0.3rem;
@@ -47,7 +51,7 @@
 
 .event-details-info {
   display: grid;
-  gap: 1rem;
+  gap: 1.5rem;
   margin-top: 2rem;
 }
 
@@ -55,6 +59,19 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
+}
+
+.event-tickets-box {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  align-items: center;
+  gap: 1rem;
+}
+
+.ticket {
+  padding: 1rem;
+  background-color: var(--sec-bgcolor);
+  border-radius: 0.3rem;
 }
 
 .event-actions {
@@ -135,6 +152,10 @@
 @media screen and (max-width: 500px) {
   .event-dates p {
     display: grid;
+  }
+
+  .event-tickets-box {
+    grid-template-columns: 1fr;
   }
 }
 

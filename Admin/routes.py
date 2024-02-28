@@ -53,7 +53,7 @@ def create_event():
       )
       db.session.add(new_event)
       db.session.commit()
-      generate_qrcode(event.id, new_event.tickets)
+      generate_qrcode(new_event.id, new_event.tickets)
       flash(f"Event '{new_event.name}' created successfully", category="success")
       return redirect(url_for('admin.pricing', event_id=new_event.id))
   return render_template("create_event.html", form=form)

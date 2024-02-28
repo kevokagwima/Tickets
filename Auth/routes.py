@@ -33,19 +33,18 @@ def signup():
 @auth.route("/signin", methods=["POST", "GET"])
 def signin():
   form = LoginForm()
-  if request.method == "POST":
-    if form.validate_on_submit():
-      user = Users.query.filter_by(email=form.email_address.data).first()
-      if user and user.check_password_correction(attempted_password=form.password.data):
-        login_user(user, remember=True)
-        flash("Login successfull", category="success")
-        return redirect(url_for("users.home"))
-      elif user is None:
-        flash("No user with that email", category="danger")
-        return redirect(url_for('auth.signin'))
-      else:
-        flash("Invalid credentials", category="danger")
-        return redirect(url_for('auth.signin'))
+  if request.method == "POST" and form.validate_on_submit():
+    user = Users.query.filter_by(email=form.email_address.data).first()
+    if user and user.check_password_correction(attempted_password=form.password.data):
+      login_user(user, remember=True)
+      flash("Login successfull", category="success")
+      return redirect(url_for("users.home"))
+    elif user is None:
+      flash("No user with that email", category="danger")
+      return redirect(url_for('auth.signin'))
+    else:
+      flash("Invalid credentials", category="danger")
+      return redirect(url_for('auth.signin'))
 
   if form.errors != {}:
     for err_msg in form.errors.values():

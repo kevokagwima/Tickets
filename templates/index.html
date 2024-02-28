@@ -71,11 +71,19 @@ Home
                 <div class="tickets-box">
                   <div class="tickets-price">
                     <img src="../static/images/voucher.png" alt="ticket">
-                    {% set tickets = [] %}
-                    {% for ticket in pricing if ticket.event == event.id %}
-                    {{ pricing.append(ticket) or "" }}
+                    {% set pricing = [] %}
+                    {% for price in ticket_pricing if price.event == event.id %}
+                    {{ pricing.append(price) or "" }}
                     {% endfor %}
-                    <h4>{{ tickets }}</h4>
+                    {% if pricing|count > 1 %}
+                    <span id="multiple">Multiple Tickets</span>
+                    {% else %}
+                    <h4>
+                      {% for ticket in pricing %}
+                      {{ "Ksh {:,}".format(ticket.amount) }}
+                      {% endfor %}
+                    </h4>
+                    {% endif %}
                   </div>
                   <div class="tickets">
                     {% if event.status == "Sold Out" %} <button id="tickets" disabled>

@@ -3,7 +3,6 @@ from flask_login import login_required, current_user
 from models import *
 from form import *
 from datetime import datetime, date
-from modules import send_email
 import stripe, os
 
 users = Blueprint("users", __name__)
@@ -31,17 +30,18 @@ def event_expiry():
 @login_required
 def home():
   events = Event.query.all()
-  pricing = Pricing.query.all()
+  ticket_pricing = Pricing.query.all()
   today = date.today()
   current_time = datetime.now()
-  return render_template("index.html", events=events, today=today, current_time=current_time, pricing=pricing)
+  return render_template("index.html", events=events, today=today, current_time=current_time, ticket_pricing=ticket_pricing)
 
 @users.route("/event-details/<int:event_id>")
 def event_details(event_id):
   try:
     event = Event.query.get(event_id)
     if event:
-      return render_template("event.html", event=event)
+      pricing = Pricing.query.filter_by(event=event.id).all()
+      return render_template("event.html", event=event, pricing=pricing)
     else:
       flash("Event not found", category="danger")
       return redirect(url_for('users.home'))
@@ -150,16 +150,9 @@ def payment(booking_id):
 @login_required
 def payment_complete(booking_id):
   booking = Bookings.query.get(booking_id)
-  event = Event.query.get(booking.event)
   booking.status = "Complete"
   db.session.commit()
   flash("Payment successfull, your tickets are ready", category="success")
-  message = {
-    'receiver': current_user.email,
-    'subject': f"{event.name}'s tickets",
-    'body': f"You have successfully purchased {booking.tickets} tickets for {event.name}. \nWe thank you for your support."
-  }
-  send_email(**message)
   return redirect(url_for('users.home'))
 
 @users.route("/payment-failed/<int:booking_id>")
@@ -170,12 +163,6 @@ def payment_failed(booking_id):
   event.tickets = event.tickets + booking.tickets
   db.session.delete(booking)
   db.session.commit()
-  message = {
-    'receiver': current_user.email,
-    'subject': f"{event.name}'s tickets",
-    'body': f"Your payment for {event.name} has not been received. Try again later."
-  }
-  send_email(**message)
   flash("Payment failed", category="danger")
   return redirect(url_for('users.home'))
 

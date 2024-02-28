@@ -1,4 +1,4 @@
-from flask import Flask, flash
+from flask import Flask, flash, abort
 from flask_login import login_manager, LoginManager
 from flask_migrate import Migrate
 from Users.routes import users
@@ -33,6 +33,7 @@ def load_user(user_id):
     return Users.query.filter_by(unique_id=user_id).first()
   except:
     flash("Unable to load user", category="danger")
+    abort(500)
 
 if __name__ == "__main__":
   app.run(debug=True)

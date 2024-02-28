@@ -26,7 +26,7 @@
       <h1>Event Details</h1>
       <div class="event-details-info">
         <div class="event-location">
-          <h4>Location</h4>
+          <h3>Location</h3>
           <p>{{ event.location }}</p>
         </div>
         <div class="event-dates">
@@ -34,6 +34,17 @@
           <p>End Date: <b>{{ event.end_date.strftime("%d/%m/%Y") }}</b></p>
           <p>Start Time: <b>{{ event.start_time.strftime("%I:%M %p") }}</b></p>
           <p>End Time: <b>{{ event.end_time.strftime("%I:%M %p") }}</b></p>
+        </div>
+        <div class="event-tickets">
+          <h3>Event Tickets</h3>
+          <div class="event-tickets-box">
+            {% for price in pricing %}
+            <div class="ticket">
+              <h4>{{ price.name }}</h4>
+              <p>{{ "Ksh {:,}".format(price.amount) }}</p>
+            </div>
+            {% endfor %}
+          </div>
         </div>
         <div class="event-actions">
           <div class="tickets-btn">
