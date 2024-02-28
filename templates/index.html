@@ -71,7 +71,11 @@ Home
                 <div class="tickets-box">
                   <div class="tickets-price">
                     <img src="../static/images/voucher.png" alt="ticket">
-                    <h4>Ksh 0</h4>
+                    {% set tickets = [] %}
+                    {% for ticket in pricing if ticket.event == event.id %}
+                    {{ pricing.append(ticket) or "" }}
+                    {% endfor %}
+                    <h4>{{ tickets }}</h4>
                   </div>
                   <div class="tickets">
                     {% if event.status == "Sold Out" %} <button id="tickets" disabled>

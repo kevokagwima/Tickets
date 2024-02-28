@@ -126,7 +126,6 @@ def edit_event(event_id):
   event = Event.query.filter_by(unique_id=event_id).first()
   if event:
     form = EventForm()
-    form.description.data = event.description
     form.start_time.data = event.start_time
     form.end_time.data = event.end_time
     if request.method == "POST":
@@ -147,7 +146,6 @@ def edit_event(event_id):
         event.start_time = form.start_time.data
         event.end_time = form.end_time.data
         event.location = form.location.data
-        event.price = form.price.data
         event.tickets = form.no_of_tickets.data
         db.session.commit()
         flash(f"Event {event.name} updated successfully", category="success")
@@ -167,8 +165,14 @@ def delete_event(event_id):
   try:
     event = Event.query.filter_by(unique_id=event_id).first()
     qrcodes = Qrcodes.query.filter_by(event=event.id).all()
+    pricing = Pricing.query.filter_by(event=event.id).all()
+    bookings = Bookings.query.filter_by(event=event.id).all()
     for qrcode in qrcodes:
       db.session.delete(qrcode)
+    for ticket in pricing:
+      db.session.delete(ticket)
+    for booking in bookings:
+      db.session.delete(booking)
     db.session.delete(event)
     db.session.commit()
     flash(f"Event {event.name} has been removed successfully", category="success")

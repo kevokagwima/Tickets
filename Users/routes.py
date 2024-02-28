@@ -21,7 +21,7 @@ def event_expiry():
       for qrcode in qrcodes:
         qrcode.status = "Closed"
         db.session.commit()
-    if event.tickets <= 0:
+    if event.tickets < 1:
       event.status = "Sold Out"
     db.session.commit()
   return None
@@ -31,9 +31,10 @@ def event_expiry():
 @login_required
 def home():
   events = Event.query.all()
+  pricing = Pricing.query.all()
   today = date.today()
   current_time = datetime.now()
-  return render_template("index.html", events=events, today=today, current_time=current_time)
+  return render_template("index.html", events=events, today=today, current_time=current_time, pricing=pricing)
 
 @users.route("/event-details/<int:event_id>")
 def event_details(event_id):
