@@ -6,7 +6,7 @@ from datetime import datetime, date
 import stripe, os
 
 users = Blueprint("users", __name__)
-stripe.api_key = os.environ['Stripe_api_key']
+stripe.api_key = os.environ.get("Stripe_api_key")
 
 @users.before_request
 def event_expiry():
