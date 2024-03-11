@@ -16,6 +16,9 @@
       <h1>{{ event.name }}</h1>
       <h4>{{ event.tagline }}</h4>
     </div>
+    <div class="header-actions">
+      <a href="{{ url_for('admin.scan_qrcode', event_id=event.unique_id) }}">Admit</a>
+    </div>
   </div>
   <div class="event-box">
     <div class="event-description">
@@ -48,12 +51,12 @@
         </div>
         <div class="event-actions">
           <div class="tickets-btn">
-            {% if event.status == "Sold Out" %}
+            {% if event.is_soldout == True %}
             <button disabled>
               <img src="{{ url_for('static', filename='Images/tickets.png') }}" alt="Edit Event">
               Sold Out
             </button>
-            {% elif event.status == "Ended" %}
+            {% elif event.is_ended == True %}
             <button disabled="disabled">
               <img src="{{ url_for('static', filename='Images/tickets.png') }}" alt="Edit Event">
               Ended

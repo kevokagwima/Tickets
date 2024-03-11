@@ -8,15 +8,31 @@
 
 .orders-box {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
 .orders {
-  margin-top: 1rem;
   background-color: var(--main-bgcolor);
   border-radius: 0.3rem;
   padding: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-color: rgb(124, 124, 124, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.overlay h1 {
+  color: var(--main-bgcolor);
 }
 
 .heading {
@@ -29,12 +45,20 @@
   margin: 0.5rem 0;
 }
 
-.order-details {
+.order-info {
+  padding: 0.2rem 0 0.5rem;
   display: grid;
-  grid-auto-flow: column;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  font-size: 1.8ch;
+}
+
+.order-details {
+  display: flex;
   gap: 1rem;
   background-color: var(--sec-bgcolor);
   padding: 1rem;
+  overflow-x: scroll;
 }
 
 .tickets {
@@ -55,4 +79,28 @@
   color: var(--main-bgcolor);
   padding: 0.2rem 1rem;
   font-size: 1.5ch;
+}
+
+@media screen and (max-width: 700px) {
+  .container {
+    padding-inline: 1rem;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  /* .order-info {
+    grid-template-columns: 1fr;
+  } */
+
+  .heading p,
+  .order-info {
+    font-size: 1.6ch;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .order-info {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
 }

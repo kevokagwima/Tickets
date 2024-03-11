@@ -3,8 +3,10 @@
   background-image: url(../images/banner.png);
   background-repeat: no-repeat;
   background-size: cover;
-  min-height: 20svh;
+  min-height: 30svh;
   display: flex;
+  flex-direction: column;
+  gap: 2rem;
   justify-content: center;
   align-items: center;
 }
@@ -21,6 +23,12 @@
 .event-header-info h4 {
   font-size: 3ch;
   color: var(--sec-bgcolor);
+}
+
+.header-actions a {
+  padding: 1rem;
+  background-color: var(--main-bgcolor);
+  color: var(--highlight-bgcolor);
 }
 
 .event-box {
@@ -66,6 +74,7 @@
   grid-template-columns: repeat(3, auto);
   align-items: center;
   gap: 1rem;
+  margin-top: 0.5rem;
 }
 
 .ticket {

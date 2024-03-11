@@ -13,17 +13,29 @@ Orders
 <div class="container">
   <h1>My Tickets</h1>
   <div class="orders-box">
-    {% for booking in bookings %}
+    {% for booking in bookings|sort(attribute="id", reverse=true) %}
     <div class="orders">
+      {% if booking.booking_owners.is_ended == True %}
+      <div class="overlay">
+        <h1>Event Ended</h1>
+      </div>
+      {% endif %}
       <div class="heading">
-        <h1>{{ booking.booking_owners.name }}</h1>
+        <p>Here are your tickets for the event:<br> <b>{{ booking.booking_owners.name }}</b></p>
         {% set tickets = [] %}
         {% for qrcode in qrcodes if qrcode.booking == booking.id %}
         {{ tickets.append(qrcode) or "" }}
         {% endfor %}
-        <p>{{ tickets|count }} ticket(s)</p>
       </div>
       <hr>
+      <div class="order-info">
+        <p id="extend">Event Location: <b>{{ booking.booking_owners.location }}</b></p>
+        <p>Tickets: <b>{{ tickets|count }} ticket(s)</b></p>
+        <p>Start Date: <b>{{ booking.booking_owners.start_date.strftime("%d/%m/%Y") }} {{
+            booking.booking_owners.start_time.strftime("at %I:%M %p") }}</b></p>
+        <p>End Date: <b>{{ booking.booking_owners.end_date.strftime("%d/%m/%Y") }} {{
+            booking.booking_owners.end_time.strftime("at %I:%M %p") }}</b></p>
+      </div>
       <div class="order-details">
         {% for ticket in tickets %}
         <div class="tickets">

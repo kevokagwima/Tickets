@@ -10,18 +10,19 @@ stripe.api_key = os.environ['Stripe_api_key']
 
 @users.before_request
 def event_expiry():
-  all_events = Event.query.filter_by(status="Active").all()
+  all_events = Event.query.all()
   for event in all_events:
     today = date.today()
     current_time = datetime.now()
-    if event.end_date < today or (event.end_date == today and event.end_time.strftime("%H:%M") < current_time.strftime("%H:%M")):
-      event.status = "Ended"
+    if event.end_date < today:
+      event.is_ended = True
+      event.is_active = False
       qrcodes = Qrcodes.query.filter_by(event=event.id).all()
       for qrcode in qrcodes:
         qrcode.status = "Closed"
         db.session.commit()
     if event.tickets < 1:
-      event.status = "Sold Out"
+      event.is_soldout = True
     db.session.commit()
   return None
 
@@ -169,5 +170,5 @@ def payment_failed(booking_id):
 @users.route("/orders")
 def orders():
   bookings = Bookings.query.filter_by(user=current_user.id).all()
-  qrcodes = Qrcodes.query.filter_by(status="Assigned").all()
+  qrcodes = Qrcodes.query.all()
   return render_template("orders.html", bookings=bookings, qrcodes=qrcodes)

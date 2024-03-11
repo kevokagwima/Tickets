@@ -4,7 +4,8 @@ from models import *
 from form import *
 from datetime import date
 from io import BytesIO
-import qrcode, boto3, os
+from pyzbar.pyzbar import decode
+import qrcode, boto3, os, cv2
 
 admin = Blueprint("admin", __name__)
 s3 = boto3.resource(
@@ -25,7 +26,7 @@ ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png"}
 def create_event():
   form = EventForm()
   if form.validate_on_submit():
-    event = Event.query.filter_by(name=form.name.data, status="Active").first()
+    event = Event.query.filter_by(name=form.name.data, is_active=True).first()
     todays_date = date.today()
     start_date = form.start_date.data
     end_date = form.end_date.data
@@ -59,6 +60,7 @@ def create_event():
   return render_template("create_event.html", form=form)
 
 @admin.route("/pricing/<int:event_id>", methods=["POST", "GET"])
+@login_required
 def pricing(event_id):
   try:
     event = Event.query.get(event_id)
@@ -81,6 +83,7 @@ def pricing(event_id):
     return redirect(url_for('users.home'))
 
 @admin.route("/remove-pricing/<int:event_id>/<int:pricing_id>")
+@login_required
 def remove_pricing(event_id, pricing_id):
   try:
     event = Event.query.get(event_id)
@@ -98,6 +101,7 @@ def remove_pricing(event_id, pricing_id):
     flash("An error occurred", category="danger")
     return redirect(url_for('users.home'))
 
+@login_required
 def generate_qrcode(event_id, tickets):
   event = Event.query.get(event_id)
   if event:
@@ -115,10 +119,48 @@ def generate_qrcode(event_id, tickets):
       qr.make(fit=True)
       qr.add_data(new_qrcode.unique_id)
       img_buffer = BytesIO()
-      qr.make_image(fill_color="black", back_color="white").save(img_buffer)
+      qr.make_image(fill_color="black", back_color="orange").save(img_buffer)
       img_buffer.seek(0)
       image_name = f"{folder_name}/" + str(new_qrcode.unique_id) + '.png'
       s3.Bucket(bucket_name).upload_fileobj(img_buffer, image_name)
+
+@admin.route('/scan-qrcode/<int:event_id>')
+@login_required
+def scan_qrcode(event_id):
+  event = Event.query.filter_by(unique_id=event_id).first()
+  capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+  received_data = None
+  while True:
+    _,frame = capture.read()
+    decoded_data = decode(frame)
+    try:
+      data = decoded_data[0][0]
+      if data != received_data:
+        print(data)
+        received_data = data
+    except:
+      pass
+    cv2.imshow("Qr Code Scanner Fram ", frame)
+    key = cv2.waitKey(1)
+    if key == ord("q"):
+      break
+  return redirect(url_for('admin.verify_qrcode', event_id=event.unique_id, qrcode=data))
+
+@admin.route('/verify-qrcode/<int:event_id>/<int:qrcode>')
+@login_required
+def verify_qrcode(event_id, qrcode):
+  event = Event.query.filter_by(unique_id=event_id).first()
+  qrcode = Qrcodes.query.filter_by(unique_id=qrcode).first()
+  if qrcode:
+    if qrcode.event != event.id:
+      flash("Invalid qrcode for this event", category="danger")
+    if qrcode.status != "Assigned":
+      flash("Qrcode not valid", category="danger")
+    else:
+      flash(f"Welcome to {event.name}. Enjoy!", category="success")
+  else:
+    flash("Unknown Qrcode", category="danger")
+  return render_template("qrcode-scan.html", event=event)
 
 @admin.route("/edit-event/<int:event_id>", methods=["POST", "GET"])
 @login_required

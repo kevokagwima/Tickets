@@ -15,10 +15,11 @@ class RegistrationForm(FlaskForm):
   password = PasswordField(label="Password", validators=[Length(min=5, message="Password must be more than 5 characters"), DataRequired(message="Password field is required")])
   password1 = PasswordField(label="Confirm Password", validators=[EqualTo("password", message="Passwords do not match"), DataRequired(message="Confirm password field is required")])
 
-  def validate_phone_number(self, phone_number_to_validate):
-    phone_number = Users.query.filter_by(phone=phone_number_to_validate.data).first()
-    if phone_number:
-      raise ValidationError("Phone Number already exists, Please try another one")
+  def validate_password(form, field):
+    special_characters = "!@#$%^&*()_+"
+    password = field.data
+    if not any(char in special_characters for char in password):
+      raise ValidationError("Password must contain at least one special character")
 
   def validate_phone_number(self, phone_number_to_validate):
     phone_number = phone_number_to_validate.data
@@ -26,6 +27,8 @@ class RegistrationForm(FlaskForm):
       raise ValidationError("Invalid phone number. Phone number must begin with 0")
     elif phone_number[1] != str(7) and phone_number[1] != str(1):
       raise ValidationError("Invalid phone number. Phone number must begin with 0 followed by 7 or 1")
+    elif Users.query.filter_by(phone=phone_number_to_validate.data).first():
+      raise ValidationError("Phone Number already exists, Please try another one")
 
   def validate_email_address(self, email_to_validate):
     email = Users.query.filter_by(email=email_to_validate.data).first()
@@ -35,6 +38,17 @@ class RegistrationForm(FlaskForm):
 class LoginForm(FlaskForm):
   email_address = EmailField(label="Email Address", validators=[DataRequired(message="Email Address field is required")])
   password = PasswordField(label="Password", validators=[DataRequired(message="Password field is required")])
+
+class ResetPasswordForm(FlaskForm):
+  email_address = EmailField(label="Email Address", validators=[DataRequired(message="Email Address field is required")])
+  password = PasswordField(label="Password", validators=[DataRequired(message="Password field is required")])
+  password1 = PasswordField(label="Confirm Password", validators=[EqualTo("password", message="Passwords do not match"), DataRequired(message="Confirm password field is required")])
+
+  def validate_password(form, field):
+    special_characters = "!@#$%^&*()_+"
+    password = field.data
+    if not any(char in special_characters for char in password):
+      raise ValidationError("Password must contain at least one special character")
 
 class EventForm(FlaskForm):
   name = StringField(label="Event Name",validators=[DataRequired(message="Event name field is required")])

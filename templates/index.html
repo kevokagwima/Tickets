@@ -30,7 +30,7 @@ Home
       <h1 id="header">Upcoming Events</h1>
       <div class="events-box">
         {% set upcoming_events = [] %}
-        {% for event in events if event.status == "Active" or event.status == "Sold Out" %}
+        {% for event in events if event.is_active == True or (event.is_active == True and event.is_soldout == True) %}
         {{ upcoming_events.append(event) or "" }}
         {% endfor %}
         {% if upcoming_events %}
@@ -57,7 +57,7 @@ Home
                 <p class="event-loc">
                   Location: {{ event.location }}
                   {% if event.tickets
-                  < 10 and event.status !="Sold Out" %} <span id="selling-out">Almost selling out</span>
+                  < 10 and event.is_soldout !=True %} <span id="selling-out">Almost selling out</span>
                     {% endif %}
                 </p>
                 <div class="event-dates">
@@ -85,12 +85,12 @@ Home
                     {% endif %}
                   </div>
                   <div class="tickets">
-                    {% if event.status == "Sold Out" %}
+                    {% if event.is_soldout == True %}
                     <button disabled>
                       <img src="{{ url_for('static', filename='Images/tickets.png') }}" alt="Edit Event">
                       Sold Out
                     </button>
-                    {% elif event.status == "Ended" %}
+                    {% elif event.is_ended == True %}
                     <button disabled="disabled">
                       <img src="{{ url_for('static', filename='Images/tickets.png') }}" alt="Edit Event">
                       Ended
@@ -119,7 +119,7 @@ Home
       <h1 id="header">Past Events</h1>
       <div class="events-box">
         {% set past_events = [] %}
-        {% for event in events if event.status == "Ended" %}
+        {% for event in events if event.is_ended == true %}
         {{ past_events.append(event) or "" }}
         {% endfor %}
         {% if past_events %}
@@ -147,14 +147,28 @@ Home
                 <div class="tickets-box">
                   <div class="tickets-price">
                     <img src="../static/images/voucher.png" alt="ticket">
-                    <h4>Ksh 0</h4>
+                    {% set pricing = [] %}
+                    {% for price in ticket_pricing if price.event == event.id %}
+                    {{ pricing.append(price) or "" }}
+                    {% endfor %}
+                    {% if pricing|count > 1 %}
+                    <span id="multiple">Multiple Tickets</span>
+                    {% else %}
+                    <h4>
+                      {% for ticket in pricing %}
+                      {{ "Ksh {:,}".format(ticket.amount) }}
+                      {% endfor %}
+                    </h4>
+                    {% endif %}
                   </div>
-                  {% if event.status == "Ended" %}
-                  <button disabled id="tickets">
-                    <img src="{{ url_for('static', filename='Images/tickets.png') }}" alt="Edit Event">
-                    Ended
-                  </button>
-                  {% endif %}
+                  <div class="tickets">
+                    {% if event.is_ended == True %}
+                    <button disabled id="tickets">
+                      <img src="{{ url_for('static', filename='Images/tickets.png') }}" alt="Edit Event">
+                      Ended
+                    </button>
+                    {% endif %}
+                  </div>
                 </div>
               </div>
           </div>

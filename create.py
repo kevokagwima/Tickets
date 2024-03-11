@@ -1,10 +1,9 @@
 from flask import Flask
 from models import *
+from config import Config
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "mssql+pyodbc://KEVINKAGWIMA/tickets?driver=ODBC+Driver+11+for+SQL+Server"
-# app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://kevokagwima:Hunter1234@kevokagwima.mysql.pythonanywhere-services.com/kevokagwima$tickets"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
+app.config.from_object(Config)
 db.init_app(app)
 
 def main():
@@ -12,7 +11,7 @@ def main():
 
 def add_role():
   new_role = Role(
-    role_name = "Buyer"
+    role_name = "Seller"
   )
   db.session.add(new_role)
   db.session.commit()
